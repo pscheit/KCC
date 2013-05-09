@@ -1,0 +1,160 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "72a93ccd08e7e6c41c3d07530824ef8a",
+    "packages": [
+        {
+            "name": "symfony/console",
+            "version": "2.1.x-dev",
+            "target-dir": "Symfony/Component/Console",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Console.git",
+                "reference": "bd18f234d793a9417b96ba078f2675c8c04a2fde"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/bd18f234d793a9417b96ba078f2675c8c04a2fde",
+                "reference": "bd18f234d793a9417b96ba078f2675c8c04a2fde",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Console": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Console Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-05-09 08:10:50"
+        },
+        {
+            "name": "symfony/process",
+            "version": "2.1.x-dev",
+            "target-dir": "Symfony/Component/Process",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Process.git",
+                "reference": "3b1b54a6148e505132e397ae05cbf58c9f6b9f29"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/3b1b54a6148e505132e397ae05cbf58c9f6b9f29",
+                "reference": "3b1b54a6148e505132e397ae05cbf58c9f6b9f29",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Process": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Process Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-04-27 18:40:50"
+        },
+        {
+            "name": "webforge/common",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pscheit/webforge-common.git",
+                "reference": "50d52ad9e39a8a623d2458756b6f8abf8cdfcbb7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pscheit/webforge-common/zipball/50d52ad9e39a8a623d2458756b6f8abf8cdfcbb7",
+                "reference": "50d52ad9e39a8a623d2458756b6f8abf8cdfcbb7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3.2",
+                "symfony/console": "2.1.*@stable",
+                "symfony/process": "2.1.*@stable"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Webforge\\Common": [
+                        "lib",
+                        "tests"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp Scheit",
+                    "email": "p.scheit@ps-webforge.com"
+                }
+            ],
+            "description": "Boilerplate for Webforge and Psc - CMS",
+            "homepage": "http://github.com/pscheit/webforge-common",
+            "keywords": [
+                "framework"
+            ],
+            "time": "2013-04-21 21:02:33"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "webforge/common": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}
