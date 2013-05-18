@@ -1,0 +1,2268 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"assertContainsOnl",
+				"assertContainsOnlyInstancesOf"
+			],
+			[
+				"Navigation",
+				"NavigationNodeRepositoryTest"
+			],
+			[
+				"example",
+				"exampleContexts"
+			],
+			[
+				"File",
+				"use File"
+			],
+			[
+				"addBlack",
+				"addBlackListProperty  (function)"
+			],
+			[
+				"au",
+				"auto_complete_visible"
+			],
+			[
+				"y",
+				"local_yank"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "bootstrap.php",
+			"settings":
+			{
+				"buffer_size": 347,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "composer.json",
+			"settings":
+			{
+				"buffer_size": 393,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/KCC/FDDB/ParsingException.php",
+			"settings":
+			{
+				"buffer_size": 78,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tests/files/searches/beeren.html",
+			"settings":
+			{
+				"buffer_size": 83792,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "<?php\n\nuse Psc\\JS\\Helper as js;\nuse Psc\\HTML\\Page5;\n\n$page = new Page5;\n$page->addRequireJS();\n$page->addTwitterBootstrapCSS();\n$page->loadCSS('css/kcc.css');\n$page->setOpen();\n\nprint $page;\n?>\n\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container\">\n      <a class=\"brand\" href=\"/\">Zähl Dich fit</a>\n      <div class=\"nav-collapse collapse\">\n        <ul class=\"nav\">\n          <li class=\"\"><a href=\"/\">Eingabe</a></li>\n        </ul>\n      </div>\n    </div>\n  </div>\n</div>\n\n\n<div class=\"container\">\n  <div class=\"hero-unit\">\n    <h1>Zähl Dich fit</h1>\n  </div>\n  <form class=\"\">\n    <div class=\"row\">\n      <div class=\"span6\">\n        <input type=\"text\" name=\"search\" id=\"search\" placeholder=\"Produkt suchen\" class=\"input-xxlarge\" />\n      </div>\n      <div class=\"span2\">\n        <div class=\"btn-group\">\n          <button class=\"btn\">in allen suchen</button>\n          <button class=\"btn dropdown-toggle\" data-toggle=\"dropdown\">\n            <span class=\"caret\"></span>\n          </button>\n          <ul class=\"dropdown-menu\">\n            <li><a href=\"#\">in zuletzt verwendet suchen</a></li>\n            <li><a href=\"#\">in allen suchen</a></li>\n          </ul>\n        </div>\n      </div>\n    </div>\n  </form>\n\n  <div class=\"row\">\n    <div class=\"span12\">\n      <table class=\"table table-striped\">\n        <thead>\n          <th>Bezeichnung</th>\n          <th>Menge</th>\n          <th>kcal</th>\n          <th></th>\n        </thead>\n        <tfoot>\n          <tr>\n            <td></td>\n            <td><strong>Summe</strong></td>\n            <td><strong data-bind=\"text: kcals()\"></strong></td>\n            <td></td>\n        </tfoot>\n        <tbody data-bind=\"foreach: countedProducts\">\n          <tr>\n            <td data-bind=\"text: label\"></td>\n            <td>\n              <input type=\"text\" class=\"input-mini\" data-bind=\"value: amount\">\n              <span class=\"unit\" data-bind=\"text: unit\"></span>\n            </td>\n            <td data-bind=\"text: kcals\"></td>\n            <td><button type=\"button\" data-bind=\"click: $parent.removeCountedProduct\" class=\"btn btn-small btn-danger\"><i class=\"icon-trash\"></i></button></td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"span6\">\n      <button type=\"button\" class=\"btn btn-primary\" data-loading-text=\"Loading...\">Loading state</button>\n    </div>\n  </div>\n</div>\n\n<script type=\"text/javascript\">\n  require(['boot'], function (boot) {\n    require(['jquery', 'knockout', 'hogan', 'twitter-bootstrap', 'twitter-typeahead'], function ($, ko, hogan) {\n      var $search = $('#search');\n\n      var products = [\n        {\n          value: 1,\n          tokens: [\"Beeren\", \"Müsli\"],\n          label: \"Beeren-Müsli\",\n          kcal: 137,\n          unit: 'g'\n        },\n        {\n          value: 2,\n          tokens: [\"Nutella\"],\n          label: \"Nutella\",\n          kcal: 450,\n          unit: 'g'\n        },\n        {\n          value: 3,\n          tokens: [\"Ei\", \"Eier\"],\n          label: \"Ei\",\n          kcal: 80,\n          reference: 1,\n          unit: 'stk'\n        },\n        {\n          value: 4,\n          tokens: [\"Vollmilch\", \"Milch\", \"3,8%\"],\n          label: \"Vollmilch 3,8%\",\n          kcal: 250,\n          unit: 'ml'\n        }\n      ];\n\n      $search.typeahead({\n        name: 'products',\n        local: products,\n        template: \"<p>{{label}}</p>\",\n        engine: hogan\n      });\n      \n\n      var CountedProduct = function (properties) {\n        var that = this;\n\n        that.amount = ko.observable();\n\n        for (var key in properties) {\n          if (key === 'amount') {\n            this[key](properties[key]);\n          } else {\n            this[key] = properties[key];\n          }\n        }\n\n        this.getReference = function () {\n          if (that.reference !== undefined) {\n            return that.reference;\n          }\n\n          return 100;\n        };\n\n        if (that.amount() === undefined) {\n          that.amount(this.getReference());\n        };\n\n        this.kcals = ko.computed(function() {\n          return this.amount() * this.kcal / this.getReference();\n        }, this);\n\n        this.formattedAmount = ko.computed(function () {\n          return this.amount()+' '+this.unit;\n        }, this);\n\n      };\n\n      var KCCModel = function() {\n        var that = this;\n\n        this.countedProducts = ko.observableArray([\n          new CountedProduct({\n            value: 1,\n            label: \"Beeren-Müsli\",\n            tokens: [\"Beeren\", \"Müsli\"],\n            amount: 130,\n            unit: \"g\",\n            kcal: 137\n          }),\n          new CountedProduct({\n            value: 4,\n            tokens: [\"Vollmilch\", \"Milch\", \"3,8%\"],\n            label: \"Vollmilch 3,8%\",\n            kcal: 250,\n            amount: 120,\n            unit: 'ml'\n          })\n        ]);\n\n        this.addCountedProduct = function (countedProduct) {\n          that.countedProducts.push(countedProduct);\n        };\n\n        this.removeCountedProduct = function (countedProduct) {\n          that.countedProducts.remove(countedProduct);\n        }\n\n        this.kcals = ko.computed(function () {\n          var sum = 0;\n          var products = that.countedProducts();\n\n          for (var key in products) {\n            sum += products[key].kcals();\n          }\n\n          return sum;\n        });\n\n        .click(function () {\n          var btn = $(this)\n          btn.button('loading')\n          setTimeout(function () {\n            btn.button('reset')\n          }, 3000)\n        })\n\n      };\n      \n      var main = new KCCModel();\n      ko.applyBindings(main);\n\n      $search.on('typeahead:autocompleted typeahead:selected', function (e, datum) {\n        var countedProduct = new CountedProduct($.extend({}, datum));\n\n        main.addCountedProduct(countedProduct);\n      });\n\n    });\n  });\n</script>\n<?php print $page->getClose(); ?>",
+			"file": "www/index.php",
+			"file_size": 5733,
+			"file_write_time": 130129984746984834,
+			"settings":
+			{
+				"buffer_size": 5915,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "www/css/kcc.css",
+			"settings":
+			{
+				"buffer_size": 104,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "etc/apache2/psc.conf",
+			"settings":
+			{
+				"buffer_size": 454,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/D/www/Configuration/Apache2/httpd-vhosts.conf",
+			"settings":
+			{
+				"buffer_size": 3001,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "lib/KCC/FDDB/Parser.php",
+			"settings":
+			{
+				"buffer_size": 1517,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 104.0,
+		"selected_items":
+		[
+			[
+				"webforge",
+				"Webforge: create class"
+			],
+			[
+				"dire",
+				"Snippet: load-psc-cms-directly"
+			],
+			[
+				"create",
+				"Webforge: create test for current class"
+			],
+			[
+				"tidy",
+				"TidyHTML"
+			],
+			[
+				"load",
+				"Snippet: load-psc-cms-directly"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"package install",
+				"Package Control: Install Package"
+			],
+			[
+				"file",
+				"File: New File Relative to Current View"
+			],
+			[
+				"f",
+				"File: Reveal"
+			],
+			[
+				"copy ",
+				"File: Copy Path"
+			],
+			[
+				"php",
+				"PHPUnit: Run These Tests"
+			],
+			[
+				"copy",
+				"File: Copy Path"
+			],
+			[
+				"phpunit",
+				"PHPUnit: Run These Tests"
+			],
+			[
+				"test",
+				"PHPUnit: Run These Tests"
+			],
+			[
+				"COPY",
+				"File: Copy Path"
+			],
+			[
+				"create test",
+				"Webforge: create test for current class"
+			],
+			[
+				"cratetest",
+				"Webforge: create test for current class"
+			],
+			[
+				"git",
+				"Git: Commit"
+			],
+			[
+				"snippet",
+				"Snippet: Class"
+			],
+			[
+				"rein",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"indent",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"in",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"package inst",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Discover Packages"
+			],
+			[
+				"reload",
+				"Schemr: Reload schemes"
+			],
+			[
+				"schemr re",
+				"Schemr: Reload schemes"
+			],
+			[
+				"schemr relo",
+				"Schemr: Reload schemes"
+			],
+			[
+				"schemr rel",
+				"Schemr: Reload schemes"
+			],
+			[
+				"schemr bl",
+				"Schemr: PscBlackPearl"
+			],
+			[
+				"schemr",
+				"Schemr: Pastels on Dark"
+			],
+			[
+				"code",
+				"SublimeCodeIntel: Reset"
+			],
+			[
+				"key",
+				"Preferences: Key Bindings - User"
+			],
+			[
+				"Package Control: u",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"Package Control: Install Package",
+				"Package Control: Install Package"
+			],
+			[
+				"Snippet: ",
+				"Snippet: #!/usr/bin/env"
+			]
+		],
+		"width": 536.0
+	},
+	"console":
+	{
+		"height": 231.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Philipp Scheit/Desktop/062269602806",
+		"/D/www/kcc/tests/KCC/FDDB/ParserTest.php",
+		"/D/www/kcc/lib/KCC/FDDB/Parser.php",
+		"/D/www/kcc/tests/files/queries/beeren.html",
+		"/C/Users/PHILIP~1/AppData/Local/Temp/Rar$DRa0.165/ajaxtest.php",
+		"/C/Users/PHILIP~1/AppData/Local/Temp/Rar$DRa0.390/ajaxtest_send.php",
+		"/C/Users/PHILIP~1/AppData/Local/Temp/Rar$DRa0.266/js/team.js",
+		"/D/www/ccalc/resources/queries/beeren.html",
+		"/D/www/ccalc/composer.json",
+		"/D/www/RvMusik/Umsetzung/warnings.php",
+		"/D/www/psc-cms/composer.json",
+		"/D/www/tiptoi/Umsetzung/base/src/vendor/pscheit/psc-cms/lib/Psc/System/Console/DeployCommand.php",
+		"/D/www/tiptoi/Umsetzung/base/src/vendor/pscheit/psc-cms/lib/Psc/System/Deploy/DeployPscCMSTask.php",
+		"/D/www/tiptoi/Umsetzung/base/src/tiptoi/Entities/Game.php",
+		"/D/www/psc-cms-js/vendor/ace/lib/ace/mode/tito.js",
+		"/D/www/psc-cms-js/vendor/ace/lib/ace/mode/php.js",
+		"/D/www/tiptoi/Umsetzung/base/htdocs/files/uploads/game/39/RIT-Spiel06_DS6_SearchAndFindQuestionTimerInfiniteTriesGameType.docx",
+		"/D/www/psc-cms-js/vendor/ace/lib/ace/mode/tito_highlight_rules.js",
+		"/D/www/psc-cms-js/vendor/ace/lib/ace/mode/textile.js",
+		"/D/www/tiptoi/Umsetzung/base/src/tiptoi/Import/OIDBlockProcessor.php",
+		"/D/www/tiptoi/Umsetzung/base/src/tiptoi/Import/Parser.php",
+		"/D/www/RvMusik/Umsetzung/errors.log",
+		"/D/www/tiptoi/Umsetzung/base/src/tiptoi/tests/Import/WimmelbuchImportTest.php",
+		"/D/www/tiptoi/tiptoi.sublime-project",
+		"/D/www/tiptoi/Umsetzung/base/files/testdata/fixtures/WoerterbuchFixtureHelperTest/TestManuskriptData.xlsx",
+		"/D/www/tiptoi/Umsetzung/base/htdocs/exports/1359968220/Weltkarte.20130204.texte.psc.xlsx",
+		"/D/www/tiptoi/Dokumentation/tito/extenders.txt",
+		"/D/www/psc-cms/lib/Psc/Code/Test/CSSTester.php",
+		"/D/www/tiptoi/Umsetzung/base/src/vendor/pscheit/psc-cms/lib/Psc/Data/Type/DCEnumType.php",
+		"/D/www/tiptoi/Umsetzung/base/src/tiptoi/SoundType.php",
+		"/D/www/tiptoi/Umsetzung/base/src/tiptoi/tito/GDSLConverter.php",
+		"/D/www/tiptoi/Umsetzung/base/bin/phpunit.xml",
+		"/D/www/tiptoi/Umsetzung/base/src/composer.json",
+		"/D/www/tiptoi/Umsetzung/base/src/inc.changelog.php",
+		"/C/Users/Philipp Scheit/Desktop/document-with-links.xml",
+		"/C/Users/Philipp Scheit/Desktop/document.xml",
+		"/C/Users/Philipp Scheit/Desktop/Good Morning,",
+		"/D/www/psc-cms/lib/Psc/CMS/Controller/NavigationController.php",
+		"/D/www/psc-cms/lib/Psc/TPL/ContentStream/EntryEntity.php",
+		"/D/www/psc-cms/lib/Psc/CMS/CommonProjectCompiler.php",
+		"/D/www/psc-cms/lib/Psc/CMS/Roles/NavigationNodeEntity.php",
+		"/D/www/psc-cms/tests/Psc/CMS/Controller/NavigationControllerTest.php",
+		"/D/www/psc-cms/tests/Psc/CMS/Service/CMSServiceTest.php",
+		"/D/www/psc-cms/lib/Psc/CMS/EntityMeta.php",
+		"/D/www/psc-cms/lib/Psc/CMS/Controller/AbstractEntityController.php",
+		"/D/www/psc-cms/lib/Psc/CMS/RightContent.php",
+		"/D/www/psc-cms/tests/Psc/CMS/Service/EntityServiceTest.php",
+		"/D/www/psc-cms/lib/Psc/Test/NavigationNodeController.php",
+		"/D/www/psc-cms/lib/Psc/CMS/Service/EntityService.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/Module.php",
+		"/D/www/psc-cms/lib/Psc/Code/Code.php",
+		"/D/www/psc-cms/tests/Psc/Doctrine/NavigationNodesTestCase.php",
+		"/D/www/psc-cms/vendor/doctrine/orm/lib/Doctrine/ORM/EntityManager.php",
+		"/D/www/psc-cms/lib/Psc/CMS/Service/CMSService.php",
+		"/D/www/psc-cms/tests/Psc/CMS/ServiceTest.php",
+		"/D/www/psc-cms/lib/Psc/Entities/CompiledPage.php",
+		"/D/www/psc-cms/lib/Psc/CMS/Roles/PageEntity.php",
+		"/D/www/psc-cms/lib/Psc/CMS/Controller/PageController.php",
+		"/D/www/psc-cms/lib/Psc/CMS/Controller/SimpleContainerController.php",
+		"/D/www/psc-cms-image/composer.json",
+		"/D/www/psc-cms/lib/Psc/CMS/Roles/Page.php",
+		"/D/www/psc-cms/lib/Psc/Entities/Page.php",
+		"/D/www/psc-cms/lib/Psc/Test/Controllers/TagController.php",
+		"/D/www/psc-cms/lib/Psc/Test/Controllers/NavigationNodeController.php",
+		"/D/www/phpunit/PHPUnit/Framework/Assert.php",
+		"/D/www/psc-cms/vendor/webforge/webforge/lib/Webforge/CMS/Navigation/NestedSetConverter.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/Fixture.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/NavigationNodeRepository.php",
+		"/D/www/psc-cms/lib/Psc/Entities/NavigationNode.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/DatabaseTestCase.php",
+		"/D/www/psc-cms/vendor/doctrine/data-fixtures/lib/Doctrine/Common/DataFixtures/Executor/ORMExecutor.php",
+		"/D/www/psc-cms/vendor/doctrine/data-fixtures/lib/Doctrine/Common/DataFixtures/Executor/AbstractExecutor.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/NestedSetsFixture.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/NestedSetFixture.php",
+		"/D/www/psc-cms/tests/Psc/Entities/NavigationNodeTest.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/RepositoryTest.php",
+		"/D/www/psc-cms/tests/Psc/Doctrine/NavigationNodeRepositoryTest.php",
+		"/D/www/psc-cms/lib/Psc/CMS/Roles/SimpleContainer.php",
+		"/D/www/psc-cms/tests/Psc/CMS/Controller/ControllerBaseTest.php",
+		"/D/www/psc-cms/lib/Psc/Entities/NavigationNodeRepository.php",
+		"/D/www/psc-cms/vendor/doctrine/dbal/lib/Doctrine/DBAL/Connection.php",
+		"/D/www/psc-cms/lib/Psc/Entities/CompiledNavigationNode.php",
+		"/D/www/psc-cms/.travis.yml",
+		"/D/www/phpunit/PHPUnit/Framework/Assert/Functions.php",
+		"/D/www/phpunit/PHPUnit/Framework/TestCase.php",
+		"/D/www/psc-cms/vendor/webforge/webforge/lib/Webforge/CMS/Navigation/DoctrineBridge.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/ORMPurger.php",
+		"/D/www/psc-cms/vendor/doctrine/data-fixtures/lib/Doctrine/Common/DataFixtures/Purger/ORMPurger.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/FixturesManager.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/NestedSetFixtureAlias2.php",
+		"/D/www/psc-cms/vendor/doctrine/data-fixtures/lib/Doctrine/Common/DataFixtures/Loader.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/FixtureLoader.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/Fixture/Loader.php",
+		"/D/www/psc-cms/vendor/doctrine/data-fixtures/lib/Doctrine/Common/DataFixtures/FixtureInterface.php",
+		"/D/www/psc-cms/vendor/nikic/php-parser/lib/PHPParser/Node.php",
+		"/D/www/psc-cms/vendor/webforge/webforge/lib/Webforge/CMS/Navigation/Node.php",
+		"/D/www/psc-cms/bin/cli.php",
+		"/D/www/psc-cms/application/inc.config.php",
+		"/D/www/psc-cms/vendor/doctrine/data-fixtures/lib/Doctrine/Common/DataFixtures/AbstractFixture.php",
+		"/D/www/psc-cms/vendor/doctrine/data-fixtures/lib/Doctrine/Common/DataFixtures/SharedFixtureInterface.php",
+		"/D/www/psc-cms-bin/host-config.php",
+		"/C/Users/Philipp Scheit/AppData/Roaming/Sublime Text 2/Packages/Default/Default (Windows).sublime-keymap",
+		"/D/www/psc-cms/lib/Psc/CMS/Roles/AbstractSimpleContainer.php",
+		"/D/www/psc-cms/lib/Psc/TPL/ContentStream/Converter.php",
+		"/D/www/psc-cms/lib/Psc/CMS/EntityForm.php",
+		"/D/www/psc-cms/lib/Psc/CMS/Controller/ContentStreamController.php",
+		"/D/www/psc-cms/lib/Psc/System/Console/CompileTestEntitiesCommand.php",
+		"/D/www/psc-cms/lib/Psc/Entities/ContentStream/ContentStream.php",
+		"/D/www/psc-cms/lib/Psc/TPL/ContentStream/ContentStream.php",
+		"/D/www/psc-cms/lib/Psc/Entities/ContentStream/Entry.php",
+		"/C/Users/Philipp Scheit/AppData/Roaming/Sublime Text 2/Packages/Webforge/Default.sublime-commands",
+		"/D/www/webforge/tests/Webforge/CMS/Navigation/NestedSetConverterTest.php",
+		"/D/www/psc-cms/vendor/webforge/testdata-repository/lib/Webforge/TestData/NestedSet/NestedSetExample.php",
+		"/D/www/psc-cms/vendor/webforge/testdata-repository/lib/Webforge/TestData/NestedSet/Consumables.php",
+		"/D/www/webforge/tests/Webforge/CMS/Navigation/DoctrineBridgeTest.php",
+		"/C/Users/Philipp Scheit/AppData/Roaming/Sublime Text 2/Packages/Webforge/Webforge.py",
+		"/D/www/psc-cms/tests/Psc/CMS/Controller/AbstractEntityControllerBaseTest.php",
+		"/D/www/psc-cms/tests/Psc/CMS/Controller/BaseControllerTest.php",
+		"/D/www/psc-cms/lib/Psc/Entities/ContentStream/Headline.php",
+		"/D/www/psc-cms/lib/Psc/Entities/ContentStream/Paragraph.php",
+		"/D/www/psc-cms/lib/Psc/TPL/ContentStream/ContextAware.php",
+		"/D/www/psc-cms/tests/files/fixtures/EntityBuilderTest/fixture.PersonEntity.php",
+		"/D/www/psc-cms/lib/Psc/Doctrine/EntityBuilder.php",
+		"/D/www/psc-cms/tests/Psc/Doctrine/EntityBuilderTest.php",
+		"/C/Users/Philipp Scheit/AppData/Roaming/Sublime Text 2/Packages/User/use.sublime-completions",
+		"/C/Users/Philipp Scheit/AppData/Roaming/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Philipp Scheit/AppData/Roaming/Sublime Text 2/Packages/User/Default (Windows).sublime-keymap",
+		"/D/www/acebusters/Umsetzung/base/include/etc/pokereval/PokerEval.class.php"
+	],
+	"find":
+	{
+		"height": 0.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"D:\\www\\psc-cms\\lib",
+			"D:\\www\\SublimeCodeIntel"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"countedproducts",
+			"(object)",
+			"http",
+			"</a>",
+			" style=\"font-weight:bold;",
+			"<td width=\"65%\">",
+			"<tr>",
+			"tr",
+			"<tr>\n<tr>",
+			"<tr>",
+			"title",
+			"pagelabel",
+			"dowarning",
+			"wrong_number",
+			"getmodesforpage",
+			"modi",
+			"getmodes",
+			"modes",
+			"postprocessor",
+			"$this->modes",
+			"modelabels",
+			"getmodesforpage",
+			"getcodeeditor",
+			"gameeditor",
+			"TitoRules",
+			"titorules",
+			"speaker",
+			"element hat di",
+			"enumtype",
+			"enum",
+			"def(",
+			"stop",
+			"right",
+			"row",
+			"wrong",
+			"table",
+			"variable",
+			"timer",
+			"starttimercommandtoken",
+			"createcommandtoken",
+			"createcommandtokens",
+			"commands",
+			"matrix",
+			"$this",
+			"entitymanager",
+			"simplecontainer",
+			"navigation",
+			"defaultLanguage",
+			"createnewnode",
+			"isscheduledforinsert",
+			"function has",
+			"persist",
+			"saveformular",
+			"'flat'=>",
+			"getflatforui",
+			"form",
+			"getentity",
+			"getrepository",
+			"getentitychan",
+			"getentity",
+			"put",
+			"function getentity",
+			"getentity",
+			"getentityname",
+			"bodyAsJSON",
+			"getactionrequest",
+			"cms\\navig",
+			"end",
+			"navigationnode",
+			"$that",
+			"createnewnode",
+			"hydratenode",
+			"debug",
+			"getflatforui",
+			"controller",
+			"setcontext",
+			"var_dump",
+			"$module",
+			"getdatabase",
+			"$module",
+			"$this->container",
+			"ident",
+			"i18ntitl",
+			"function count",
+			"Framework_Constraint_Count",
+			"addfixture",
+			"$this->loader",
+			"setupdatabase",
+			"flush",
+			"context",
+			"construct",
+			"navigationnode",
+			"context",
+			"createentitycontroller",
+			"gettypeclass",
+			"getcontext",
+			"code_intel_",
+			"entitynotfound",
+			"entitymeta",
+			"entitygridpanel",
+			"html",
+			"tpl",
+			"blacklistproperties",
+			"alt",
+			"context",
+			"inject",
+			"container",
+			"$this->getLanguages()",
+			"send",
+			"getpath",
+			"php",
+			"66ccff",
+			"8aa6c1",
+			"b6b9f9",
+			"type",
+			"codeintel_scan_exclude_dir",
+			"tab",
+			"\\",
+			"replace",
+			"line",
+			"goto",
+			"key",
+			"console",
+			"sbp_emacs_has_mark",
+			"log_",
+			"ctrl+g",
+			"ctrl+n",
+			"region"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": true,
+		"regex": false,
+		"replace_history":
+		[
+			"",
+			"<tr>\n",
+			"TitoHighlightRules",
+			"context",
+			"$languages",
+			"\\\\",
+			"Socktrine"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "bootstrap.php",
+					"settings":
+					{
+						"buffer_size": 347,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								347,
+								347
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "composer.json",
+					"settings":
+					{
+						"buffer_size": 393,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								375,
+								375
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "lib/KCC/FDDB/ParsingException.php",
+					"settings":
+					{
+						"buffer_size": 78,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								28,
+								28
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "tests/files/searches/beeren.html",
+					"settings":
+					{
+						"buffer_size": 83792,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "www/index.php",
+					"settings":
+					{
+						"buffer_size": 5915,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5384,
+								5384
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "www/css/kcc.css",
+					"settings":
+					{
+						"buffer_size": 104,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								59,
+								59
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/CSS/CSS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "etc/apache2/psc.conf",
+					"settings":
+					{
+						"buffer_size": 454,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								145,
+								145
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/D/www/Configuration/Apache2/httpd-vhosts.conf",
+					"settings":
+					{
+						"buffer_size": 3001,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2979,
+								2979
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 319.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "lib/KCC/FDDB/Parser.php",
+					"settings":
+					{
+						"buffer_size": 1517,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 358.0
+	},
+	"output.git":
+	{
+		"height": 100.0
+	},
+	"output.phpunit":
+	{
+		"height": 382.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 100.0
+	},
+	"output.xdebug_inspect":
+	{
+		"height": 100.0
+	},
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": false,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"kcc.css",
+				"www/css/kcc.css"
+			],
+			[
+				".php",
+				"lib/KCC/FDDB/Parser.php"
+			],
+			[
+				"index.",
+				"www/index.php"
+			],
+			[
+				"psc.con",
+				"etc/apache2/psc.conf"
+			],
+			[
+				"beeren",
+				"tests/files/searches/beeren.html"
+			],
+			[
+				"",
+				"tests/KCC/FDDB/ParserTest.php"
+			],
+			[
+				"parser",
+				"lib/KCC/FDDB/Parser.php"
+			],
+			[
+				"parsinge",
+				"lib/KCC/FDDB/ParsingException.php"
+			],
+			[
+				"composer.j",
+				"composer.json"
+			],
+			[
+				"boot",
+				"bootstrap.php"
+			],
+			[
+				"parser.php",
+				"lib/KCC/FDDB/Parser.php"
+			],
+			[
+				"parsert",
+				"tests/KCC/FDDB/ParserTest.php"
+			],
+			[
+				"parsertest",
+				"tests/KCC/FDDB/ParserTest.php"
+			],
+			[
+				"parser.",
+				"lib/KCC/FDDB/Parser.php"
+			],
+			[
+				"musik",
+				"Umsetzung/base/src/tiptoi/tests/Import/MusikImportTest.php"
+			],
+			[
+				"newpagero",
+				"Umsetzung/base/src/tiptoi/Import/NewPageRowCriteria.php"
+			],
+			[
+				"postprop",
+				"Umsetzung/base/src/tiptoi/Import/PostProcessor.php"
+			],
+			[
+				"errors",
+				"/D/www/RvMusik/Umsetzung/errors.log"
+			],
+			[
+				"oidblockpro",
+				"Umsetzung/base/src/tiptoi/Import/OIDBlockProcessor.php"
+			],
+			[
+				"musikim",
+				"Umsetzung/base/src/tiptoi/tests/Import/MusikImportTest.php"
+			],
+			[
+				"import.log",
+				"/D/www/RvMusik/Umsetzung/import.log"
+			],
+			[
+				"importtest",
+				"Umsetzung/base/src/tiptoi/tests/Import/ImportTest.php"
+			],
+			[
+				"pageheader",
+				"Umsetzung/base/src/tiptoi/Import/PageHeaderRowCriteria.php"
+			],
+			[
+				"postpro",
+				"Umsetzung/base/src/tiptoi/Import/PostProcessor.php"
+			],
+			[
+				"parser.ph",
+				"Umsetzung/base/src/tiptoi/Import/Parser.php"
+			],
+			[
+				"import.php",
+				"Umsetzung/base/src/tiptoi/Import.php"
+			],
+			[
+				"importest",
+				"Umsetzung/base/src/tiptoi/tests/Import/ImportTest.php"
+			],
+			[
+				"importte",
+				"Umsetzung/base/src/tiptoi/tests/Import/ImportTest.php"
+			],
+			[
+				"composer.json",
+				"Umsetzung/base/src/composer.json"
+			],
+			[
+				"changelog.php",
+				"Umsetzung/base/src/inc.changelog.php"
+			],
+			[
+				"composer.js",
+				"Umsetzung/base/src/composer.json"
+			],
+			[
+				"gameco",
+				"Umsetzung/base/src/tiptoi/Controllers/GameController.php"
+			],
+			[
+				"game.php",
+				"Umsetzung/base/src/tiptoi/Entities/Game.php"
+			],
+			[
+				"composer",
+				"Umsetzung/base/src/composer.json"
+			],
+			[
+				"gamecon",
+				"Umsetzung/base/src/tiptoi/Controllers/GameController.php"
+			],
+			[
+				"error",
+				"/D/www/RvMusik/Umsetzung/errors.log"
+			],
+			[
+				"sounds.php",
+				"/D/www/RvMusik/Umsetzung/sounds.php"
+			],
+			[
+				"mainfix",
+				"Umsetzung/base/src/tiptoi/tests/fixtures/MainFixture.php"
+			],
+			[
+				"dinos",
+				"Umsetzung/base/src/tiptoi/tests/Import/DinosaurierImportTest.php"
+			],
+			[
+				"importest.php",
+				"Umsetzung/base/src/tiptoi/tests/Import/ImportTest.php"
+			],
+			[
+				"tiptoi.su",
+				"tiptoi.sublime-project"
+			],
+			[
+				"wimmelbuch",
+				"Umsetzung/base/src/tiptoi/tests/Import/WimmelbuchImportTest.php"
+			],
+			[
+				"main.php",
+				"Umsetzung/base/src/tiptoi/Main.php"
+			],
+			[
+				"csstester",
+				"Umsetzung/base/src/vendor/pscheit/psc-cms/lib/Psc/Code/Test/CSSTester.php"
+			],
+			[
+				"dcen",
+				"Umsetzung/base/src/vendor/pscheit/psc-cms/lib/Psc/Data/Type/DCEnumType.php"
+			],
+			[
+				"compiler",
+				"Umsetzung/base/src/tiptoi/Entities/Compiler.php"
+			],
+			[
+				"dcenum",
+				"Umsetzung/base/src/vendor/pscheit/psc-cms/lib/Psc/Data/Type/DCEnumType.php"
+			],
+			[
+				"dynamicenum",
+				"Umsetzung/base/src/vendor/pscheit/psc-cms/lib/Psc/Data/Type/DynamicEnumType.php"
+			],
+			[
+				"gametype",
+				"Umsetzung/base/src/tiptoi/GameTypeClass.php"
+			],
+			[
+				"type.php",
+				"Umsetzung/base/src/tiptoi/ActionType.php"
+			],
+			[
+				"soundtype",
+				"Umsetzung/base/src/tiptoi/SoundType.php"
+			],
+			[
+				"gdslcon",
+				"Umsetzung/base/src/tiptoi/tito/GDSLConverter.php"
+			],
+			[
+				"gamewrit",
+				"Umsetzung/base/src/tiptoi/Export/Games/GameWriter.php"
+			],
+			[
+				"rounds",
+				"Umsetzung/base/src/tiptoi/tito/RoundsFinder.php"
+			],
+			[
+				"gametypetoken",
+				"Umsetzung/base/src/tiptoi/tito/GameTypeToken.php"
+			],
+			[
+				"gdslco",
+				"Umsetzung/base/src/tiptoi/tito/GDSLConverter.php"
+			],
+			[
+				"lexer",
+				"Umsetzung/base/src/tiptoi/tito/Lexer.php"
+			],
+			[
+				"gamewriter",
+				"Umsetzung/base/src/tiptoi/Export/Games/GameWriter.php"
+			],
+			[
+				"extender",
+				"Dokumentation/tito/extenders.txt"
+			],
+			[
+				"phpuni",
+				"Umsetzung/base/bin/phpunit.xml"
+			],
+			[
+				"gdslcommandstest",
+				"Umsetzung/base/src/tiptoi/tests/tito/GDSLConverterCommandsTest.php"
+			],
+			[
+				"lexer.php",
+				"Umsetzung/base/src/tiptoi/tito/Lexer.php"
+			],
+			[
+				"starttimercommand",
+				"Umsetzung/base/src/tiptoi/tito/StartTimerCommandToken.php"
+			],
+			[
+				"titolexer.php",
+				"Umsetzung/base/src/tiptoi/tito/Lexer.php"
+			],
+			[
+				"inc.change",
+				"Umsetzung/base/src/inc.changelog.php"
+			],
+			[
+				"composerj",
+				"composer.json"
+			],
+			[
+				"cmsrolespage",
+				"lib/Psc/CMS/Roles/Page.php"
+			],
+			[
+				"simplecontainerco",
+				"lib/Psc/CMS/Controller/SimpleContainerController.php"
+			],
+			[
+				"pageco",
+				"lib/Psc/CMS/Controller/PageController.php"
+			],
+			[
+				"navigationco",
+				"lib/Psc/CMS/Controller/NavigationController.php"
+			],
+			[
+				"navigationcontrollerte",
+				"tests/Psc/CMS/Controller/NavigationControllerTest.php"
+			],
+			[
+				"pageentity",
+				"lib/Psc/CMS/Roles/PageEntity.php"
+			],
+			[
+				"compiledpage",
+				"lib/Psc/Entities/CompiledPage.php"
+			],
+			[
+				"page",
+				"lib/Psc/Entities/Page.php"
+			],
+			[
+				"cmsrolespage.php",
+				"lib/Psc/CMS/Roles/Page.php"
+			],
+			[
+				"cmsservicetest",
+				"tests/Psc/CMS/Service/CMSServiceTest.php"
+			],
+			[
+				"cmservicetest",
+				"tests/Psc/CMS/ServiceTest.php"
+			],
+			[
+				"cmss",
+				"lib/Psc/CMS/Service/CMSService.php"
+			],
+			[
+				"navigationcon",
+				"lib/Psc/CMS/Controller/NavigationController.php"
+			],
+			[
+				"doctrineormentitymanager",
+				"vendor/doctrine/orm/lib/Doctrine/ORM/EntityManager.php"
+			],
+			[
+				"navigationtestcase",
+				"tests/Psc/Doctrine/NavigationNodesTestCase.php"
+			],
+			[
+				"navigationcontrollert",
+				"tests/Psc/CMS/Controller/NavigationControllerTest.php"
+			],
+			[
+				"rightco",
+				"lib/Psc/CMS/RightContent.php"
+			],
+			[
+				"abstractentityco",
+				"lib/Psc/CMS/Controller/AbstractEntityController.php"
+			],
+			[
+				"entityser",
+				"tests/Psc/CMS/Service/EntityServiceTest.php"
+			],
+			[
+				"navigationcontrollertest",
+				"tests/Psc/CMS/Controller/NavigationControllerTest.php"
+			],
+			[
+				"navigationnodeco",
+				"lib/Psc/Test/Controllers/NavigationNodeController.php"
+			],
+			[
+				"entityservicet",
+				"tests/Psc/CMS/Service/EntityServiceTest.php"
+			],
+			[
+				"code.php",
+				"lib/Psc/Code/Code.php"
+			],
+			[
+				"pscdoctrinemodule",
+				"lib/Psc/Doctrine/Module.php"
+			],
+			[
+				"entityservice",
+				"lib/Psc/CMS/Service/EntityService.php"
+			],
+			[
+				"entitym",
+				"lib/Psc/CMS/EntityMeta.php"
+			],
+			[
+				"entitymet",
+				"lib/Psc/CMS/EntityMeta.php"
+			],
+			[
+				"navigationcontroller",
+				"lib/Psc/CMS/Controller/NavigationController.php"
+			],
+			[
+				"psccmsservicetest",
+				"tests/Psc/CMS/Service/CMSServiceTest.php"
+			],
+			[
+				"controllernavigation",
+				"lib/Psc/CMS/Controller/NavigationController.php"
+			],
+			[
+				"navigationnodeentity",
+				"lib/Psc/CMS/Roles/NavigationNodeEntity.php"
+			],
+			[
+				"commonproj",
+				"lib/Psc/CMS/CommonProjectCompiler.php"
+			],
+			[
+				"entryentity",
+				"lib/Psc/TPL/ContentStream/EntryEntity.php"
+			],
+			[
+				"navigation",
+				"lib/Psc/CMS/Controller/NavigationController.php"
+			],
+			[
+				"controller",
+				"tests/Psc/CMS/Controller/ControllerBaseTest.php"
+			],
+			[
+				"navigationnodere",
+				"lib/Psc/Doctrine/NavigationNodeRepository.php"
+			],
+			[
+				"navigationnodestestc",
+				"tests/Psc/Doctrine/NavigationNodesTestCase.php"
+			],
+			[
+				"navigationnoderepo",
+				"lib/Psc/Doctrine/NavigationNodeRepository.php"
+			],
+			[
+				"noderepository",
+				"lib/Psc/Entities/NavigationNodeRepository.php"
+			],
+			[
+				"smplecontainer",
+				"lib/Psc/CMS/Roles/SimpleContainer.php"
+			],
+			[
+				"navigationode",
+				"lib/Psc/Entities/NavigationNode.php"
+			],
+			[
+				"connection.php",
+				"vendor/doctrine/dbal/lib/Doctrine/DBAL/Connection.php"
+			],
+			[
+				"navigationnoderepository",
+				"lib/Psc/Doctrine/NavigationNodeRepository.php"
+			],
+			[
+				"repositorytest",
+				"lib/Psc/Doctrine/RepositoryTest.php"
+			],
+			[
+				"navigationnoderepositorytest",
+				"tests/Psc/Doctrine/NavigationNodeRepositoryTest.php"
+			],
+			[
+				"repository",
+				"lib/Psc/Doctrine/RepositoryTest.php"
+			],
+			[
+				"navigationnodetestcase",
+				"tests/Psc/Doctrine/NavigationNodesTestCase.php"
+			],
+			[
+				"navigationcont",
+				"lib/Psc/CMS/Controller/NavigationController.php"
+			],
+			[
+				"navigationcontrolertest",
+				"tests/Psc/CMS/Controller/NavigationControllerTest.php"
+			],
+			[
+				"module.php",
+				"lib/Psc/Doctrine/Module.php"
+			],
+			[
+				"simplecontainercontroller",
+				"lib/Psc/CMS/Controller/SimpleContainerController.php"
+			],
+			[
+				"pagecontroller",
+				"lib/Psc/CMS/Controller/PageController.php"
+			],
+			[
+				"navigationcontroll",
+				"lib/Psc/CMS/Controller/NavigationController.php"
+			],
+			[
+				"navigationnodetest",
+				"tests/Psc/Doctrine/NavigationNodeRepositoryTest.php"
+			],
+			[
+				"compilednavigationn",
+				"lib/Psc/Entities/CompiledNavigationNode.php"
+			],
+			[
+				"doctrinedatabasetest.php",
+				"lib/Psc/Doctrine/DatabaseTestCase.php"
+			],
+			[
+				"navigationnode.php",
+				"lib/Psc/Entities/NavigationNode.php"
+			],
+			[
+				"navigationrepositorytest",
+				"tests/Psc/Doctrine/NavigationNodeRepositoryTest.php"
+			],
+			[
+				".travis",
+				".travis.yml"
+			],
+			[
+				"navigationnoder",
+				"lib/Psc/Doctrine/NavigationNodeRepository.php"
+			],
+			[
+				"nodere",
+				"lib/Psc/Entities/NavigationNodeRepository.php"
+			],
+			[
+				"nestedsetfix",
+				"lib/Psc/Doctrine/NestedSetFixture.php"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"tiptoi",
+				"/D/www/tiptoi/tiptoi.sublime-project"
+			],
+			[
+				"psc-cms",
+				"/D/www/psc-cms/psc-cms.sublime-project"
+			],
+			[
+				"serien",
+				"/D/www/serien-loader/serien-loader.sublime-project"
+			],
+			[
+				"psc-cms-js",
+				"/D/www/psc-cms-js/psc-cms-js.sublime-project"
+			],
+			[
+				"hagedorn",
+				"/D/www/Hagedorn/hagedorn.sublime-project"
+			],
+			[
+				"hage",
+				"/D/www/Hagedorn/hagedorn.sublime-project"
+			],
+			[
+				"psc-cm",
+				"/D/www/psc-cms/psc-cms.sublime-project"
+			],
+			[
+				"comun",
+				"/D/www/comun/comun.sublime-project"
+			],
+			[
+				"webfor",
+				"/D/www/webforge/webforge.sublime-project"
+			],
+			[
+				"webforge",
+				"/D/www/webforge/webforge.sublime-project"
+			],
+			[
+				"",
+				"/D/www/comun/comun.sublime-project"
+			],
+			[
+				"co",
+				"/D/www/comun/comun.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 204.0,
+	"status_bar_visible": true
+}

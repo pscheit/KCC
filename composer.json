@@ -8,11 +8,12 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "webforge/common": "dev-master"
+        "webforge/webforge": "dev-master"
     },
     "autoload": {
         "psr-0": {
-            "KCC": ["lib/", "tests/"]
+            "KCC": ["lib/", "tests/"],
+            "Psc": "D:\\www\\psc-cms\\lib"
         }
     }
 }
