@@ -138,10 +138,18 @@ print $page;
 
 <script type="text/javascript">
   require(['boot'], function (boot) {
-    require(['jquery', 'knockout', 'hogan', 'twitter-bootstrap', 'twitter-typeahead', 'Psc/Date', 'Psc/AjaxHandler', 'Psc/Request', 'jquery-ui-i18n'], function ($, ko, hogan) {
-      $.datepicker.setDefaults($.datepicker.regional['de']);
+    require(
+      [
+        'jquery', 'knockout', 'hogan', 
+        'app/KCC/Main', 'app/KCC/Backend', 'app/KCC/CountedProduct',
+        'app/date-binding', 'twitter-bootstrap', 'twitter-typeahead', 'Psc/Date', 'jquery-ui-i18n'
+      ], function (
+        $, ko, hogan, 
+        KCCMain, KCCBackend, KCCCountedProduct
+      )
+    {
 
-      var $search = $('#search');
+      $.datepicker.setDefaults($.datepicker.regional['de']);
 
       var products = [
         {
@@ -175,207 +183,27 @@ print $page;
         }
       ];
 
+
+      var main = new KCCMain(new KCCBackend(), new Psc.Date());
+      ko.applyBindings(main);
+
+      var $search = $('#search');
       $search.typeahead({
         name: 'products',
         local: products,
         template: "<p>{{label}}</p>",
         engine: hogan
       });
-      
-
-      var CountedProduct = function (properties) {
-        var that = this;
-
-        that.amount = ko.observable();
-
-        for (var key in properties) {
-          if (key === 'amount') {
-            this[key](properties[key]);
-          } else {
-            this[key] = properties[key];
-          }
-        }
-
-        this.getReference = function () {
-          if (that.reference !== undefined) {
-            return that.reference;
-          }
-
-          return 100;
-        };
-
-        if (that.amount() === undefined) {
-          that.amount(this.getReference());
-        };
-
-        this.kcals = ko.computed(function() {
-          return this.amount() * this.kcal / this.getReference();
-        }, this);
-
-        this.formattedAmount = ko.computed(function () {
-          return this.amount()+' '+this.unit;
-        }, this);
-
-      };
-
-      ko.bindingHandlers.date = {
-        init: function (element, valueAccessor) {
-          var settings = valueAccessor();
-
-          $(element).html(settings.value().format(settings.format));
-        },
-        update: function (element, valueAccessor) {
-          var settings = valueAccessor();
-
-          $(element).html(settings.value().format(settings.format));
-        }
-      };
-
-      var KCCBackend = function () {
-        var that = this;
-        this.countedProductsByDay = {};
-        this.ajax = new Psc.AjaxHandler();
-
-        this.retrieveCountedProducts = function(date) {
-          var d = $.Deferred(), day = date.format('$yy-mm-dd');
-
-          if (that.countedProductsByDay[day]) {
-            return that.countedProductsByDay[day];
-          }
-
-          window.setTimeout(function () {
-            var countedProducts = [];
-
-            if (day === '2013-05-17') {
-              countedProducts.push(new CountedProduct({
-                value: 1,
-                label: "Beeren-Müsli",
-                tokens: ["Beeren", "Müsli"],
-                amount: 130,
-                unit: "g",
-                kcal: 137
-              }));
-
-              countedProducts.push(new CountedProduct({
-                value: 4,
-                tokens: ["Vollmilch", "Milch", "3,8%"],
-                label: "Vollmilch 3,8%",
-                kcal: 250,
-                amount: 120,
-                unit: 'ml'
-              }));
-            }
-
-            d.resolve(that.registerCountedProducts(countedProducts, date));
-          }, 800);
-
-          return d.promise();
-        }
-
-        this.registerCountedProducts = function(countedProducts, date) {
-          var day = date.format('$yy-mm-dd');
-
-          return that.countedProductsByDay[day] = countedProducts;
-        };
-
-        this.insertProduct = function(product) {
-          that.ajax.handle(new Psc.Request({
-            url: '/entities/products/',
-            method: 'POST',
-            body: product
-          })).done(function () {
-            console.log(arguments);
-          }).fail(function () {
-            alert("request failed");
-            console.log(arguments);
-          });
-        }
-      };
-
-      var KCCProductModel = function(backend) {
-        var that = this;
-
-        this.label = ko.observable("Würstchen");
-        this.manufacturer = ko.observable("ALDI");
-        this.reference = ko.observable(100);
-        this.unit = ko.observable('g');
-        this.kcal = ko.observable(400);
-
-        this.insert = function (product) {
-          backend.insertProduct({
-            label: that.label(),
-            manufacturer: that.manufacturer(),
-            reference: that.reference(),
-            unit: that.unit(),
-            kcal : that.kcal()
-          });
-        };
-      };
-
-      var KCCModel = function(backend, date) {
-        var that = this;
-
-        this.backend = backend;
-        this.date = ko.observable(date);
-        this.countedProducts = ko.observableArray();
-        this.newProduct = new KCCProductModel(this.backend);
-
-        this.addCountedProduct = function (countedProduct) {
-          that.countedProducts.push(countedProduct);
-        };
-
-        this.removeCountedProduct = function (countedProduct) {
-          that.countedProducts.remove(countedProduct);
-        }
-
-        this.kcals = ko.computed(function () {
-          var sum = 0;
-          var products = that.countedProducts();
-
-          for (var key in products) {
-            sum += products[key].kcals();
-          }
-
-          return sum;
-        });
-
-        this.save = function (kcc, event) {
-          var $btn = $(event.target);
-          
-          $btn.button('loading');
-          
-          setTimeout(function () {
-            $btn.button('reset')
-          }, 3000);
-
-        };
-
-        this.changeView = function(change) {
-          that.view(that.date().add(change));
-        }
-
-        this.view = function (date) {
-          $.when(that.backend.retrieveCountedProducts(date)).then(function (countedProducts) {
-            that.date(date);
-
-            that.countedProducts(countedProducts);
-          });
-        };
-
-        // init
-        this.view(date);
-      };
-      
-      var main = new KCCModel(new KCCBackend(), new Psc.Date());
-      ko.applyBindings(main);
 
       $search.on('typeahead:autocompleted typeahead:selected', function (e, datum) {
         e.preventDefault();
-        var countedProduct = new CountedProduct($.extend({}, datum));
+        var countedProduct = new KCCCountedProduct($.extend({}, datum));
 
         main.addCountedProduct(countedProduct);
       });
+      
     });
   });
 </script>
+
 <?php print $page->getClose(); ?>
