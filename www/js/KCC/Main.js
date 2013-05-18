@@ -1,4 +1,4 @@
-define(['jquery', 'app/boot', 'knockout', './Product'], function ($, boot, ko, KCCProduct) {
+define(['jquery', 'app/boot', 'knockout', './Product', './CountedProduct'], function ($, boot, ko, KCCProduct, KCCCountedProduct) {
 
   return function(backend, date) {
     var that = this;
@@ -36,6 +36,14 @@ define(['jquery', 'app/boot', 'knockout', './Product'], function ($, boot, ko, K
         $btn.button('reset');
       }, 3000);
 
+    };
+
+    this.insertProduct = function () {
+      that.backend.insertProduct(that.newProduct).done(function (product) {
+        var countedProduct = new KCCCountedProduct($.extend({}, ko.toJS(product)));
+
+        that.addCountedProduct(countedProduct);
+      });
     };
 
     this.changeView = function(change) {

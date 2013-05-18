@@ -1,22 +1,13 @@
 define(['knockout'], function (ko) {
 
-  return function(backend) {
+  return function(backend, properties) {
     var that = this;
+    properties = properties || {};
 
-    this.label = ko.observable("Würstchen");
-    this.manufacturer = ko.observable("ALDI");
-    this.reference = ko.observable(100);
-    this.unit = ko.observable('g');
-    this.kcal = ko.observable(400);
-
-    this.insert = function (product) {
-      backend.insertProduct({
-        label: that.label(),
-        manufacturer: that.manufacturer(),
-        reference: that.reference(),
-        unit: that.unit(),
-        kcal : that.kcal()
-      });
-    };
+    this.label = ko.observable(properties.label);
+    this.manufacturer = ko.observable(properties.manufacturer);
+    this.reference = ko.observable(properties.reference);
+    this.unit = ko.observable(properties.unit);
+    this.kcal = ko.observable(properties.kcal);
   };
 });

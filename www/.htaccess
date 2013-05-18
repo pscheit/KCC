@@ -1,0 +1,25 @@
+# htaccess für comun web
+Options FollowSymLinks
+
+RewriteEngine On
+RewriteBase /
+
+# benutze direkten hardware rewrite für css und js dateien aus psc-cms sourcen
+# (ist schneller als ResourceHandler, weil der immer auch doctrine bootstrappen muss)
+# der Alias /psc-cms muss auf htdocs von psc-cms source zeigen (ohne trailing slash)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} ^/(js|css)
+RewriteRule  ^(.*)  /psc-cms/$1 [L,PT]
+
+#api
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} ^/(cms|entities)/.*
+RewriteRule . /api.php [L]
+
+#index
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/(favicon\.ico)
+RewriteRule . /index.php [L]
+

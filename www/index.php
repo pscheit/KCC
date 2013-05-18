@@ -127,7 +127,7 @@ print $page;
           </div>
           <div class="control-group">
             <div class="controls">
-              <button type="button" data-bind="click: insert" class="btn">Eintragen</button>
+              <button type="button" data-bind="click: $root.insertProduct" class="btn">Eintragen</button>
             </div>
           </div>
         </fieldset>
@@ -151,57 +151,24 @@ print $page;
 
       $.datepicker.setDefaults($.datepicker.regional['de']);
 
-      var products = [
-        {
-          value: 1,
-          tokens: ["Beeren", "Müsli"],
-          label: "Beeren-Müsli",
-          kcal: 137,
-          unit: 'g'
-        },
-        {
-          value: 2,
-          tokens: ["Nutella"],
-          label: "Nutella",
-          kcal: 450,
-          unit: 'g'
-        },
-        {
-          value: 3,
-          tokens: ["Ei", "Eier"],
-          label: "Ei",
-          kcal: 80,
-          reference: 1,
-          unit: 'stk'
-        },
-        {
-          value: 4,
-          tokens: ["Vollmilch", "Milch", "3,8%"],
-          label: "Vollmilch 3,8%",
-          kcal: 250,
-          unit: 'ml'
-        }
-      ];
-
-
       var main = new KCCMain(new KCCBackend(), new Psc.Date());
       ko.applyBindings(main);
 
-      var $search = $('#search');
-      $search.typeahead({
-        name: 'products',
-        local: products,
-        template: "<p>{{label}}</p>",
-        engine: hogan
-      });
+      var $search = $('#search')
+        .typeahead({
+          name: 'products',
+          remote: '/entities/products',
+          template: "<p>{{label}}</p>",
+          engine: hogan,
+          limit: 20,
+          valueKey: "id"
+        })
+        .on('typeahead:autocompleted typeahead:selected', function (e, datum) {
+          e.preventDefault();
+          var countedProduct = new KCCCountedProduct($.extend({}, datum));
 
-      $search.on('typeahead:autocompleted typeahead:selected', function (e, datum) {
-        e.preventDefault();
-        var countedProduct = new KCCCountedProduct($.extend({}, datum));
-
-        main.addCountedProduct(countedProduct);
-      });
-      
+          main.addCountedProduct(countedProduct);
+        });
     });
   });
 </script>

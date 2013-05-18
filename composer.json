@@ -10,6 +10,9 @@
     "require": {
         "webforge/webforge": "dev-master"
     },
+    "require-dev": {
+        "doctrine/data-fixtures": "1.0.*@dev"
+    },
     "autoload": {
         "psr-0": {
             "KCC": ["lib/", "tests/"],

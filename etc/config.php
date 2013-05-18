@@ -9,7 +9,7 @@ $conf['project']['title'] = 'Psc - CMS - Kcc ['.($project->isStaging() ? 'stagin
 
 $conf['db']['default']['host'] = '127.0.0.1';
 $conf['db']['default']['user'] = $project->getLowerName();
-$conf['db']['default']['password'] = '6fydltvc1ycvwb';
+$conf['db']['default']['password'] = 'eb9ep2xph82r4b';
 $conf['db']['default']['database'] = $project->isStaging() ? $project->getLowerName().'_staging' : $project->getLowerName();
 $conf['db']['default']['port'] = NULL;
 $conf['db']['default']['charset'] = 'utf8';
@@ -23,14 +23,7 @@ $conf['languages'] = array('de');
 
 // lowercasename => CamelCaseName
 $conf['doctrine']['entities']['names'] = array(
-                                          'contentstream'=>'ContentStream',
-                                          'navigationnode'=>'NavigationNode',
-                                          'newsentry'=>'NewsEntry',
-                                          'calendarevent'=>'CalendarEvent'
-                                        );
+);
 
 // full FQN to custom Type
 $conf['doctrine']['types'] = array();
-
-//require 'inc.testCreater.config.php';
-?>

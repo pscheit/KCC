@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "4afd6097e229ce7bc9e5cf795cec4f6d",
+    "hash": "f5cf97c6a8e3f32da1f5e4c32e9b25e7",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -132,16 +132,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "4116eff37635219101a22c9732f409633eb07c5d"
+                "reference": "45123145f70dd79618963a72a5271b4f389712e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/4116eff37635219101a22c9732f409633eb07c5d",
-                "reference": "4116eff37635219101a22c9732f409633eb07c5d",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/45123145f70dd79618963a72a5271b4f389712e4",
+                "reference": "45123145f70dd79618963a72a5271b4f389712e4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
+            },
+            "conflict": {
+                "doctrine/common": ">2.2,<2.4"
             },
             "type": "library",
             "extra": {
@@ -180,7 +183,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -190,7 +193,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2013-05-04 23:23:40"
+            "time": "2013-05-13 02:51:07"
         },
         {
             "name": "doctrine/collections",
@@ -265,12 +268,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "7eea788cb5869d9954b0d8091969f54b875d1003"
+                "reference": "2.4.0-RC2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/7eea788cb5869d9954b0d8091969f54b875d1003",
-                "reference": "7eea788cb5869d9954b0d8091969f54b875d1003",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/2.4.0-RC2",
+                "reference": "2.4.0-RC2",
                 "shasum": ""
             },
             "require": {
@@ -331,7 +334,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2013-05-09 08:02:38"
+            "time": "2013-05-09 21:35:24"
         },
         {
             "name": "doctrine/dbal",
@@ -339,12 +342,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "587b5510a7c22f3a4829c933279a4ade8bf45c3a"
+                "reference": "081e461e446d650a3d804e20967417fbba27f8c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/587b5510a7c22f3a4829c933279a4ade8bf45c3a",
-                "reference": "587b5510a7c22f3a4829c933279a4ade8bf45c3a",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/081e461e446d650a3d804e20967417fbba27f8c7",
+                "reference": "081e461e446d650a3d804e20967417fbba27f8c7",
                 "shasum": ""
             },
             "require": {
@@ -394,7 +397,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2013-05-09 14:04:51"
+            "time": "2013-05-11 07:45:37"
         },
         {
             "name": "doctrine/inflector",
@@ -527,12 +530,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "e0feccc2e46021689d3c5cf2a1d1e920a060b8ad"
+                "reference": "425f375899b9b054867ea3a3cb752dabdd874651"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/e0feccc2e46021689d3c5cf2a1d1e920a060b8ad",
-                "reference": "e0feccc2e46021689d3c5cf2a1d1e920a060b8ad",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/425f375899b9b054867ea3a3cb752dabdd874651",
+                "reference": "425f375899b9b054867ea3a3cb752dabdd874651",
                 "shasum": ""
             },
             "require": {
@@ -589,7 +592,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2013-05-09 16:17:03"
+            "time": "2013-05-11 07:51:12"
         },
         {
             "name": "nikic/php-parser",
@@ -636,12 +639,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/psc-cms.git",
-                "reference": "60f4c0a710aa98472b0f6e0c444a22d07ddcb29e"
+                "reference": "28534b10e0500e22889f3f9ba3eba6adc94e3a0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pscheit/psc-cms/zipball/60f4c0a710aa98472b0f6e0c444a22d07ddcb29e",
-                "reference": "60f4c0a710aa98472b0f6e0c444a22d07ddcb29e",
+                "url": "https://api.github.com/repos/pscheit/psc-cms/zipball/28534b10e0500e22889f3f9ba3eba6adc94e3a0f",
+                "reference": "28534b10e0500e22889f3f9ba3eba6adc94e3a0f",
                 "shasum": ""
             },
             "require": {
@@ -699,7 +702,7 @@
                 "cms",
                 "framework"
             ],
-            "time": "2013-04-29 09:32:20"
+            "time": "2013-05-17 15:01:02"
         },
         {
             "name": "pscheit/psc-cms-boot",
@@ -1061,14 +1064,69 @@
         }
     ],
     "packages-dev": [
-
+        {
+            "name": "doctrine/data-fixtures",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/data-fixtures.git",
+                "reference": "6924952026b77ff492da559b04ad166d25c611cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/6924952026b77ff492da559b04ad166d25c611cb",
+                "reference": "6924952026b77ff492da559b04ad166d25c611cb",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": ">=2.2,<2.5-dev",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "doctrine/orm": ">=2.2,<2.5-dev"
+            },
+            "suggest": {
+                "doctrine/mongodb-odm": "For loading MongoDB ODM fixtures",
+                "doctrine/orm": "For loading ORM fixtures",
+                "doctrine/phpcr-odm": "For loading PHPCR ODM fixtures"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\DataFixtures": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                }
+            ],
+            "description": "Data Fixtures for all Doctrine Object Managers",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "database"
+            ],
+            "time": "2013-04-11 23:14:04"
+        }
     ],
     "aliases": [
 
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "webforge/webforge": 20
+        "webforge/webforge": 20,
+        "doctrine/data-fixtures": 20
     },
     "platform": [
 

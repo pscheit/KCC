@@ -1,4 +1,4 @@
-define(['jquery', './CountedProduct', 'Psc/AjaxHandler', 'Psc/Request'], function ($, KCCCountedProduct) {
+define(['jquery', './CountedProduct', './Product', 'Psc/AjaxHandler', 'Psc/Request'], function ($, KCCCountedProduct, KCCProduct) {
 
   return function () {
     var that = this;
@@ -48,16 +48,29 @@ define(['jquery', './CountedProduct', 'Psc/AjaxHandler', 'Psc/Request'], functio
     };
 
     this.insertProduct = function(product) {
+      var d = $.Deferred(), that = this;
+
       that.ajax.handle(new Psc.Request({
         url: '/entities/products/',
         method: 'POST',
-        body: product
-      })).done(function () {
-        console.log(arguments);
+        body: {
+          label: product.label(),
+          manufacturer: product.manufacturer(),
+          reference: product.reference(),
+          unit: product.unit(),
+          kcal : product.kcal()
+        }
+      })).done(function (ajaxResponse) {
+        var product = new KCCProduct(that, ajaxResponse.getBody());
+
+        d.resolve(product);
+
       }).fail(function () {
         alert("request failed");
         console.log(arguments);
       });
+
+      return d.promise();
     };
   };
 });
