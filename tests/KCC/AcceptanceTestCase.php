@@ -43,6 +43,10 @@ class AcceptanceTestCase extends \Psc\Doctrine\DatabaseTestCase {
     }
 
     if (isset($this->tester)) {
+      if (isset($this->html)) {
+        print $this->html;
+      }
+
       print '------------ Acceptance (Fail) ------------'."\n";
       print "\n";
       print $this->tester->getLog();

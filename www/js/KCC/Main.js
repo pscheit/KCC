@@ -1,4 +1,4 @@
-define(['jquery', 'app/boot', 'knockout', './Product', './CountedProduct'], function ($, boot, ko, KCCProduct, KCCCountedProduct) {
+define(['jquery', 'app/boot', 'knockout', './Product', './CountedProduct', 'twitter-bootstrap'], function ($, boot, ko, KCCProduct, KCCCountedProduct) {
 
   return function(backend, date) {
     var that = this;
@@ -32,10 +32,11 @@ define(['jquery', 'app/boot', 'knockout', './Product', './CountedProduct'], func
 
       $btn.button('loading');
 
-      setTimeout(function () {
-        $btn.button('reset');
-      }, 3000);
+      that.backend.save(that).done(function () {
 
+      }).always(function () {
+        $btn.button('reset');
+      });
     };
 
     this.insertProduct = function () {
@@ -51,10 +52,10 @@ define(['jquery', 'app/boot', 'knockout', './Product', './CountedProduct'], func
     };
 
     this.view = function (date) {
-      $.when(that.backend.retrieveCountedProducts(date)).then(function (countedProducts) {
+      $.when(that.backend.retrieveCountedProducts(date)).then(function (countedProductsByDay) {
         that.date(date);
 
-        that.countedProducts(countedProducts);
+        that.countedProducts(countedProductsByDay[date.format('$yy-mm-dd')]);
       });
     };
 

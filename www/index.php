@@ -142,7 +142,7 @@ print $page;
       [
         'jquery', 'knockout', 'hogan', 
         'app/KCC/Main', 'app/KCC/Backend', 'app/KCC/CountedProduct',
-        'app/date-binding', 'twitter-bootstrap', 'twitter-typeahead', 'Psc/Date', 'jquery-ui-i18n'
+        'app/date-binding', 'twitter-typeahead', 'Psc/Date', 'jquery-ui-i18n'
       ], function (
         $, ko, hogan, 
         KCCMain, KCCBackend, KCCCountedProduct

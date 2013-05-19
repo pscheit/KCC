@@ -639,12 +639,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/psc-cms.git",
-                "reference": "28534b10e0500e22889f3f9ba3eba6adc94e3a0f"
+                "reference": "a43080635a0ae6605c6d411f079e4de8c9cd4fef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pscheit/psc-cms/zipball/28534b10e0500e22889f3f9ba3eba6adc94e3a0f",
-                "reference": "28534b10e0500e22889f3f9ba3eba6adc94e3a0f",
+                "url": "https://api.github.com/repos/pscheit/psc-cms/zipball/a43080635a0ae6605c6d411f079e4de8c9cd4fef",
+                "reference": "a43080635a0ae6605c6d411f079e4de8c9cd4fef",
                 "shasum": ""
             },
             "require": {
@@ -702,7 +702,7 @@
                 "cms",
                 "framework"
             ],
-            "time": "2013-05-17 15:01:02"
+            "time": "2013-05-18 19:57:00"
         },
         {
             "name": "pscheit/psc-cms-boot",

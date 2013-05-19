@@ -22,7 +22,7 @@ define(['jquery', 'knockout'], function($, ko) {
 
     if (that.amount() === undefined) {
       that.amount(this.getReference());
-    };
+    }
 
     this.kcals = ko.computed(function() {
       return this.amount() * this.kcal / this.getReference();
@@ -31,5 +31,12 @@ define(['jquery', 'knockout'], function($, ko) {
     this.formattedAmount = ko.computed(function () {
       return this.amount()+' '+this.unit;
     }, this);
+
+    this.toJS = function () {
+      return {
+        amount: this.amount(),
+        productId: this.id
+      };
+    };
   };
 });

@@ -3,6 +3,9 @@
 namespace KCC;
 
 use KCC\Entities\Product;
+use KCC\Entities\User;
+use KCC\Entities\CountedProduct;
+use Webforge\Common\DateTime\Date;
 
 class APITest extends AcceptanceTestCase {
 
@@ -37,6 +40,7 @@ class APITest extends AcceptanceTestCase {
   }
 
   public function testGetsAllProductsJSONResponse() {
+    $this->resetDatabaseOnNextTest();
     $this->insertSomeProducts();
     $products = $this->test->acceptance('product')->dispatch('GET', '/entities/products', array(), 'json', 200, $public = TRUE);
 
@@ -47,6 +51,66 @@ class APITest extends AcceptanceTestCase {
       $this->assertObjectHasAttribute('label', $product, $debug);
       $this->assertObjectHasAttribute('tokens', $product, $debug);
     }
+  }
+
+  public function testSavesCountedProductsByDate() {
+    $this->resetDatabaseOnNextTest();
+    $this->insertUser('p.scheit');
+    $this->insertSomeProducts();
+
+    $body = json_decode('{
+      "countedProductsByDay": {"2013-05-19":[{"amount":"130","productId":"1"},{"amount":"120","productId":"3"}]},
+      "user": "p.scheit@ps-webforge.com"
+     }');
+
+    $this->test->acceptance('product')->dispatch('POST', '/entities/products/counted', $body, 'json', 200, TRUE);
+    $this->em->clear();
+
+    $products = $this->em->getRepository('KCC\Entities\CountedProduct')->getUserByDayQuery('p.scheit@ps-webforge.com', new Date('2013-05-19'))->getResult();
+
+    $this->assertCount(2, $products);
+    $this->assertContainsOnlyInstancesOf('KCC\Entities\CountedProduct', $products);
+
+    foreach ($products as $countedProduct) {
+      $this->assertEquals('2013-05-19', $countedProduct->getDay()->format('Y-m-d'));
+      $this->assertGreaterThan(0, $countedProduct->getAmount());
+    }
+  }
+
+  public function testSavesCountedProductsByDateNotTwice() {
+    $this->resetDatabaseOnNextTest();
+    $this->insertUser('p.scheit');
+    $this->insertSomeProducts();
+
+    $body = json_decode('{
+      "countedProductsByDay": {"2013-05-19":[{"amount":"130","productId":"1"},{"amount":"120","productId":"3"}]},
+      "user": "p.scheit@ps-webforge.com"
+     }');
+
+    $this->test->acceptance('product')->dispatch('POST', '/entities/products/counted', $body, 'json', 200, TRUE);
+    $this->em->clear();
+    $products = $this->em->getRepository('KCC\Entities\CountedProduct')->getUserByDayQuery('p.scheit@ps-webforge.com', new Date('2013-05-19'))->getResult();
+    $this->assertCount(2, $products);
+
+    $this->test->acceptance('product')->dispatch('POST', '/entities/products/counted', $body, 'json', 200, TRUE);
+    $this->em->clear();
+    $products = $this->em->getRepository('KCC\Entities\CountedProduct')->getUserByDayQuery('p.scheit@ps-webforge.com', new Date('2013-05-19'))->getResult();
+    $this->assertCount(2, $products);
+  }
+
+  public function testGetsAllCountedProductsForADayGroupedByDay() {
+    $this->resetDatabaseOnNextTest();
+    $this->insertUser('p.scheit');
+    $this->insertSomeProducts();
+
+    $body = json_decode('{
+      "countedProductsByDay": {"2013-05-19":[{"amount":"130","productId":"1"},{"amount":"120","productId":"3"}]},
+      "user": "p.scheit@ps-webforge.com"
+     }');
+    $this->test->acceptance('product')->dispatch('POST', '/entities/products/counted', $body, 'json', 200, TRUE);
+
+    $structure = $this->test->acceptance('product')->dispatch('GET', '/entities/products/counted', array('user'=>'p.scheit@ps-webforge.com', 'day'=>'2013-05-19'), 'json', 200, TRUE);
+    $this->assertEquals($body, $structure);
   }
 
   public function insertSomeProducts() {
@@ -65,5 +129,13 @@ class APITest extends AcceptanceTestCase {
 
     $em->flush();
     $em->clear();
+  }
+
+  public function insertUser($name) {
+    $user = new User($name.'@ps-webforge.com');
+    $user->hashPassword('hae');
+    $this->em->persist($user);
+
+    return $user;
   }
 }

@@ -12,31 +12,35 @@ define(['jquery', './CountedProduct', './Product', 'Psc/AjaxHandler', 'Psc/Reque
         return that.countedProductsByDay[day];
       }
 
-      window.setTimeout(function () {
-        var countedProducts = [];
+      that.ajax.handle(
+        new Psc.Request({
+          url: '/entities/products/counted',
+          body: {
+            user: 'p.scheit@ps-webforge.com',
+            day: day
+          },
+          method: 'GET'
+        })
+      ).done(function (response) {
+        var countedProducts, countedProduct, countedProductsByDay = response.getBody().countedProductsByDay;
 
-        if (day === '2013-05-17') {
-          countedProducts.push(new KCCCountedProduct({
-            value: 1,
-            label: "Beeren-Müsli",
-            tokens: ["Beeren", "Müsli"],
-            amount: 130,
-            unit: "g",
-            kcal: 137
-          }));
+        for (var day in countedProductsByDay) {
+          countedProducts = [];
+          for (var cp in countedProductsByDay[day]) {
+            countedProduct = new KCCCountedProduct(countedProductsByDay[day][cp]);
 
-          countedProducts.push(new KCCCountedProduct({
-            value: 4,
-            tokens: ["Vollmilch", "Milch", "3,8%"],
-            label: "Vollmilch 3,8%",
-            kcal: 250,
-            amount: 120,
-            unit: 'ml'
-          }));
+            countedProducts.push(countedProduct);
+          }
+
+          that.registerCountedProducts(countedProducts, date);
         }
 
-        d.resolve(that.registerCountedProducts(countedProducts, date));
-      }, 800);
+        d.resolve(that.countedProductsByDay);
+
+      }).fail(function (response) {
+        alert("saving failed");
+        console.log(response);
+      });
 
       return d.promise();
     };
@@ -71,6 +75,43 @@ define(['jquery', './CountedProduct', './Product', 'Psc/AjaxHandler', 'Psc/Reque
       });
 
       return d.promise();
+    };
+
+    this.save = function(main) {
+      var d = $.Deferred(), that = this;
+
+      that.ajax.handle(
+        new Psc.Request({
+          url: '/entities/products/counted',
+          body: {
+            countedProductsByDay: this.exportCountedProducts(),
+            user: 'p.scheit@ps-webforge.com'
+          },
+          method: 'POST'
+        })
+      ).done(function (response) {
+        d.resolve(response);
+      }).fail(function (response) {
+        alert("saving failed");
+        console.log(response);
+      });
+
+      return d.promise();
+    };
+
+    this.exportCountedProducts = function () {
+      var data = {}, countedProduct;
+
+      for (var day in that.countedProductsByDay) {
+        data[day] = [];
+        for (var p in that.countedProductsByDay[day]) {
+          countedProduct = that.countedProductsByDay[day][p];
+
+          data[day].push(countedProduct.toJS());
+        }
+      }
+
+      return data;
     };
   };
 });

@@ -2,7 +2,7 @@
 
 namespace KCC\Entities;
 
-use Psc\DateTime\DateTime;
+use Webforge\Common\DateTime\DateTime;
 use Psc\Data\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 
@@ -50,13 +50,13 @@ abstract class CompiledProduct extends \Psc\CMS\AbstractEntity {
   protected $kcal;
   
   /**
-   * @var Psc\DateTime\DateTime
+   * @var Webforge\Common\DateTime\DateTime
    * @ORM\Column(type="PscDateTime")
    */
   protected $created;
   
   /**
-   * @var Psc\DateTime\DateTime
+   * @var Webforge\Common\DateTime\DateTime
    * @ORM\Column(type="PscDateTime", nullable=true)
    */
   protected $updated;
@@ -170,14 +170,14 @@ abstract class CompiledProduct extends \Psc\CMS\AbstractEntity {
   }
   
   /**
-   * @return Psc\DateTime\DateTime
+   * @return Webforge\Common\DateTime\DateTime
    */
   public function getCreated() {
     return $this->created;
   }
   
   /**
-   * @param Psc\DateTime\DateTime $created
+   * @param Webforge\Common\DateTime\DateTime $created
    */
   public function setCreated(DateTime $created) {
     $this->created = $created;
@@ -185,14 +185,14 @@ abstract class CompiledProduct extends \Psc\CMS\AbstractEntity {
   }
   
   /**
-   * @return Psc\DateTime\DateTime
+   * @return Webforge\Common\DateTime\DateTime
    */
   public function getUpdated() {
     return $this->updated;
   }
   
   /**
-   * @param Psc\DateTime\DateTime $updated
+   * @param Webforge\Common\DateTime\DateTime $updated
    */
   public function setUpdated(DateTime $updated = NULL) {
     $this->updated = $updated;

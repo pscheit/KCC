@@ -40,6 +40,36 @@ class Compiler extends \Psc\CMS\CommonProjectCompiler {
     );
   }
 
+  public function compileCountedProduct() {
+    extract($this->help());
+    
+    return $this->getModelCompiler()->compile(
+      $entity('CountedProduct'),
+      $defaultId(),
+
+      $property('amount', $type('Float')),
+      $property('day', $type('Date')),
+      $property('sort', $type('PositiveInteger'), $nullable()),
+
+      $build(
+        $relation($targetMeta('Product'), 'ManyToOne', 'unidirectional', 'source')
+          ->onDelete(EntityRelation::CASCADE)
+      ),
+      $build(
+        $relation($targetMeta('User')->setIdentifier('email'), 'ManyToOne', 'unidirectional', 'source')
+          ->onDelete(EntityRelation::CASCADE)
+      ),
+
+      $constructor(
+        $argument('product'),
+        $argument('amount'),
+        $argument('day'),
+        $argument('user'),
+        $argument('sort', NULL)
+      )
+    );
+  }
+
   public function compileUser() {
     return $this->doCompileUser();
   }
