@@ -1,4 +1,4 @@
-define(['jquery', 'app/boot', 'knockout', './Product', './CountedProduct', 'twitter-bootstrap'], function ($, boot, ko, KCCProduct, KCCCountedProduct) {
+define(['jquery', 'app/boot', 'knockout', './Product', './CountedProduct', 'app/persona', 'twitter-bootstrap'], function ($, boot, ko, KCCProduct, KCCCountedProduct, persona) {
 
   return function(backend, date) {
     var that = this;
@@ -41,10 +41,17 @@ define(['jquery', 'app/boot', 'knockout', './Product', './CountedProduct', 'twit
 
     this.insertProduct = function () {
       that.backend.insertProduct(that.newProduct).done(function (product) {
-        var countedProduct = new KCCCountedProduct($.extend({}, ko.toJS(product)));
-
-        that.addCountedProduct(countedProduct);
+        that.addCountedProduct(
+          that.createCountedProductFromProduct(ko.toJS(product))
+        );
       });
+    };
+
+    this.createCountedProductFromProduct = function (productProperties) {
+      var properties = $.extend({productId: productProperties.id}, productProperties);
+      delete properties.id;
+
+      return new KCCCountedProduct(properties);
     };
 
     this.changeView = function(change) {
@@ -52,12 +59,32 @@ define(['jquery', 'app/boot', 'knockout', './Product', './CountedProduct', 'twit
     };
 
     this.view = function (date) {
-      $.when(that.backend.retrieveCountedProducts(date)).then(function (countedProductsByDay) {
+      $.when(that.backend.retrieveCountedProducts(date)).then(function (countedProducts) {
         that.date(date);
 
-        that.countedProducts(countedProductsByDay[date.format('$yy-mm-dd')]);
+        that.countedProducts(countedProducts);
       });
     };
+
+    var Persona = function () {
+      var that = this;
+
+      this.email = ko.observable(null);
+
+      this.isLoggedIn = ko.computed(function() {
+        return that.email() !== null;
+      });
+
+      this.signIn = function () {
+        persona.login();
+      };
+
+      persona.init().done(function (infos) {
+        that.email(infos.email);
+      });
+    };
+
+    this.persona = new Persona();
 
     // init
     this.view(date);

@@ -56,11 +56,11 @@ class ProductController extends \Psc\CMS\Controller\AbstractEntityController {
       }
 
       foreach ($countedProducts as $countedProduct) {
-        $product = $this->hydrate('KCC\Entities\Product', $countedProduct['productId']);
+        $product = $this->hydrate('KCC\Entities\Product', $countedProduct->productId);
 
         $countedProduct = new CountedProduct(
           $product, 
-          (float) $countedProduct['amount'], 
+          (float) $countedProduct->amount, 
           $day,
           $user,
           $sort++

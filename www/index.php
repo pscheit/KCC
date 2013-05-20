@@ -20,6 +20,15 @@ print $page;
         <ul class="nav">
           <li class=""><a href="/">Eingabe</a></li>
         </ul>
+        <form class="navbar-form pull-right" data-bind="with: persona">
+          <!--<input type="text" placeholder="Email" class="span2">
+          <input type="password" placeholder="Password" class="span2">-->
+
+          <!-- ko if: !isLoggedIn -->
+          <button data-bind="click: signIn" class="btn" type="button">Persona Sign in</button>
+          <!-- /ko -->
+          <span class="brand" data-bind="if: isLoggedIn, text: email"></span>
+        </form>
       </div>
     </div>
   </div>
@@ -140,11 +149,11 @@ print $page;
   require(['boot'], function (boot) {
     require(
       [
-        'jquery', 'knockout', 'hogan', 
+        'jquery', 'knockout', 'hogan',
         'app/KCC/Main', 'app/KCC/Backend', 'app/KCC/CountedProduct',
         'app/date-binding', 'twitter-typeahead', 'Psc/Date', 'jquery-ui-i18n'
       ], function (
-        $, ko, hogan, 
+        $, ko, hogan,
         KCCMain, KCCBackend, KCCCountedProduct
       )
     {
@@ -165,9 +174,11 @@ print $page;
         })
         .on('typeahead:autocompleted typeahead:selected', function (e, datum) {
           e.preventDefault();
-          var countedProduct = new KCCCountedProduct($.extend({}, datum));
 
-          main.addCountedProduct(countedProduct);
+          main.addCountedProduct(
+            main.createCountedProductFromProduct(datum)
+          );
+
         });
     });
   });

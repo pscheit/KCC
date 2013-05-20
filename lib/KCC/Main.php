@@ -33,7 +33,7 @@ class Main extends \Psc\CMS\ProjectMain {
   }
   
   public function initServices() {
-    $this->mainService = $this->getEntityService()
+    $this->getEntityService()
       ->setLanguages($this->getLanguages())
       ->setLanguage($this->getLanguage());
 

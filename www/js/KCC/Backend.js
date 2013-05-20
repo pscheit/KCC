@@ -22,33 +22,24 @@ define(['jquery', './CountedProduct', './Product', 'Psc/AjaxHandler', 'Psc/Reque
           method: 'GET'
         })
       ).done(function (response) {
-        var countedProducts, countedProduct, countedProductsByDay = response.getBody().countedProductsByDay;
+        var countedProductsByDay = response.getBody().countedProductsByDay;
+        var retrievedProducts = countedProductsByDay[day] || [];
+        var countedProducts = [];
 
-        for (var day in countedProductsByDay) {
-          countedProducts = [];
-          for (var cp in countedProductsByDay[day]) {
-            countedProduct = new KCCCountedProduct(countedProductsByDay[day][cp]);
-
-            countedProducts.push(countedProduct);
-          }
-
-          that.registerCountedProducts(countedProducts, date);
+        for (var cp = 0; cp < retrievedProducts.length; cp++) {
+          countedProducts.push(new KCCCountedProduct(retrievedProducts[cp]));
         }
 
-        d.resolve(that.countedProductsByDay);
+        that.countedProductsByDay[day] = countedProducts;
+
+        d.resolve(countedProducts);
 
       }).fail(function (response) {
-        alert("saving failed");
+        alert("loading failed");
         console.log(response);
       });
 
       return d.promise();
-    };
-
-    this.registerCountedProducts = function(countedProducts, date) {
-      var day = date.format('$yy-mm-dd');
-
-      return that.countedProductsByDay[day] = countedProducts;
     };
 
     this.insertProduct = function(product) {
@@ -66,6 +57,7 @@ define(['jquery', './CountedProduct', './Product', 'Psc/AjaxHandler', 'Psc/Reque
         }
       })).done(function (ajaxResponse) {
         var product = new KCCProduct(that, ajaxResponse.getBody());
+        console.log(product);
 
         d.resolve(product);
 
@@ -80,20 +72,22 @@ define(['jquery', './CountedProduct', './Product', 'Psc/AjaxHandler', 'Psc/Reque
     this.save = function(main) {
       var d = $.Deferred(), that = this;
 
-      that.ajax.handle(
-        new Psc.Request({
-          url: '/entities/products/counted',
-          body: {
-            countedProductsByDay: this.exportCountedProducts(),
-            user: 'p.scheit@ps-webforge.com'
-          },
-          method: 'POST'
-        })
-      ).done(function (response) {
+      var request = new Psc.Request({
+        url: '/entities/products/counted',
+        body: {
+          countedProductsByDay: this.exportCountedProducts(),
+          user: 'p.scheit@ps-webforge.com'
+        },
+        method: 'POST'
+      });
+
+      request.sendAs('json');
+
+      that.ajax.handle(request).done(function (response) {
         d.resolve(response);
       }).fail(function (response) {
         alert("saving failed");
-        console.log(response);
+        console.log(request, response);
       });
 
       return d.promise();

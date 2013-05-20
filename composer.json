@@ -16,7 +16,8 @@
     "autoload": {
         "psr-0": {
             "KCC": ["lib/", "tests/"],
-            "Psc": "D:\\www\\psc-cms\\lib"
+            "Psc": "D:\\www\\psc-cms\\lib",
+            "Webforge\\Persona": "D:\\www\\webforge-persona\\lib"
         }
     }
 }

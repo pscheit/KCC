@@ -12,9 +12,14 @@ use Doctrine\ORM\Mapping AS ORM;
 class CountedProduct extends CompiledCountedProduct {
 
   public function export() {
+    $product = $this->getProduct();
     return (object) array(
+      'amount'=>$this->getAmount(),
       'productId'=>$this->product->getId(),
-      'amount'=>$this->getAmount()
+      'label'=>$product->getLabel(),
+      'reference'=>$product->getReference(),
+      'unit'=>$product->getUnit(),
+      'kcal'=>$product->getKcal()
     );
   }
   
