@@ -169,9 +169,9 @@ print $page;
         .typeahead({
           name: 'products',
           remote: '/entities/products',
-          template: "<p>{{label}}</p>",
+          template: "<p>{{label}} {{#manufacturer}}({{manufacturer}}){{/manufacturer}}</p>",
           engine: hogan,
-          limit: 20,
+          limit: 8,
           valueKey: "id"
         })
         .on('typeahead:autocompleted typeahead:selected', function (e, datum) {
@@ -181,6 +181,9 @@ print $page;
             main.createCountedProductFromProduct(datum)
           );
 
+          window.setTimeout(function () {
+            $search.val('');
+          }, 10);
         });
     });
   });
