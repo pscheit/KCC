@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(name="users")
  */
 class User extends CompiledUser {
+
+  public function export() {
+    $object = parent::export();
+    return $object;
+  }
   
   public function getEntityName() {
     return 'KCC\Entities\User';

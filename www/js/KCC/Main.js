@@ -79,8 +79,15 @@ define(['jquery', 'app/boot', 'knockout', './Product', './CountedProduct', 'app/
         persona.login();
       };
 
+      this.signOut = function() {
+        persona.logout();
+      };
+
       persona.init().done(function (infos) {
         that.email(infos.email);
+      }).fail(function (details) {
+        console.log(details);
+        alert('login failed');
       });
     };
 

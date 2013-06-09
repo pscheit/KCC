@@ -6,7 +6,7 @@ use KCC\Entities\Product;
 use KCC\Entities\CountedProduct;
 use Webforge\Common\DateTime\Date;
 
-class ProductController extends \Psc\CMS\Controller\AbstractEntityController {
+class ProductController extends \Psc\CMS\Controller\ContainerController {
   
   protected function setUp() {
     parent::setUp();
@@ -37,12 +37,13 @@ class ProductController extends \Psc\CMS\Controller\AbstractEntityController {
   }
 
   public function saveCountedProducts($requestData) {
-    if (!isset($requestData->user)) {
-      throw new \Psc\Exception('user key is missing in requestData. Avaible keys: '.implode(',', array_keys((array) $requestData)));
+    if (!isset($requestData->countedProductsByDay)) {
+      throw $this->err->badMessageFormat(__FUNCTION__, 'couuntedProductsByDay is missing in requestData. Avaible keys: '.implode(',', array_keys((array) $requestData)));
     }
 
-    $user = $this->hydrate('KCC\Entities\User', $requestData->user);
+    $user = $this->container->getLoggedInUser();
     $em = $this->dc->getEntityManager();
+    \Psc\Doctrine\Helper::enableSQLLogging('stack', $em);
 
     $q = $em->getRepository('KCC\Entities\CountedProduct')->getUserByDayQuery($user->getEmail());
 
@@ -56,6 +57,7 @@ class ProductController extends \Psc\CMS\Controller\AbstractEntityController {
       }
 
       foreach ($countedProducts as $countedProduct) {
+        $countedProduct = (object) $countedProduct;
         $product = $this->hydrate('KCC\Entities\Product', $countedProduct->productId);
 
         $countedProduct = new CountedProduct(
@@ -65,12 +67,13 @@ class ProductController extends \Psc\CMS\Controller\AbstractEntityController {
           $user,
           $sort++
         );
+
         $em->persist($countedProduct);
       }
     }
-
     $em->flush();
-    return (object) array('saved'=>true);
+
+    return (object) array('saved'=>true, 'log'=>\Psc\Doctrine\Helper::printSQLLog('/^(INSERT|UPDATE|DELETE)/', TRUE));
   }
 
   public function getCountedProducts(Array $query) {
@@ -94,4 +97,3 @@ class ProductController extends \Psc\CMS\Controller\AbstractEntityController {
     return (object) $data;
   }
 }
-?>

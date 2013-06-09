@@ -14,7 +14,7 @@ define(['jquery', 'Psc/AjaxHandler', 'Psc/Request', 'https://login.persona.org/i
           ajax.handle(
             new Psc.Request({
               method: 'POST',
-              url: 'cms/persona/verify',
+              url: '/kcc/auth/login',
               body: {
                 assertion: assertion
               }

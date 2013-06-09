@@ -13,7 +13,7 @@ requirejs.config({
   }
 });
 
-define(['require', 'path-config'], function (require) {
+define(['require', 'boot-helper'], function (require, boot) {
 
   //require(['app/main']);
 

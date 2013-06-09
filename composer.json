@@ -11,13 +11,16 @@
         "webforge/webforge": "dev-master"
     },
     "require-dev": {
-        "doctrine/data-fixtures": "1.0.*@dev"
+        "doctrine/data-fixtures": "1.0.*@dev",
+        "webforge/testplate": "1.2.*@dev",
+        "guzzle/guzzle": "3.5.*"
     },
     "autoload": {
         "psr-0": {
             "KCC": ["lib/", "tests/"],
             "Psc": "D:\\www\\psc-cms\\lib",
-            "Webforge\\Persona": "D:\\www\\webforge-persona\\lib"
+            "Webforge\\Persona": "D:\\www\\webforge-persona\\lib",
+            "Webforge": "D:\\www\\webforge\\lib"
         }
     }
 }

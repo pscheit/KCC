@@ -24,10 +24,12 @@ print $page;
           <!--<input type="text" placeholder="Email" class="span2">
           <input type="password" placeholder="Password" class="span2">-->
 
-          <!-- ko if: !isLoggedIn -->
+          <!-- ko if: !isLoggedIn() -->
           <button data-bind="click: signIn" class="btn" type="button">Persona Sign in</button>
           <!-- /ko -->
-          <span class="brand" data-bind="if: isLoggedIn, text: email"></span>
+          <!-- ko if: isLoggedIn() -->
+          <span class="brand" data-bind="text: email"></span><button data-bind="click: signOut" class="btn" type="button">Sign Out</button>
+          <!-- /ko -->
         </form>
       </div>
     </div>

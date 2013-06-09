@@ -13,7 +13,7 @@ RewriteRule  ^(.*)  /psc-cms/$1 [L,PT]
 
 #api
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} ^/(cms|entities)/.*
+RewriteCond %{REQUEST_URI} ^/(entities|kcc)/.*
 RewriteRule . /api.php [L]
 
 #index

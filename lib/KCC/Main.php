@@ -7,6 +7,8 @@ use Psc\Doctrine\DCPackage;
 use Kcc\CMS\EntityService;
 use Psc\CMS\EntityMeta;
 use Psc\System\LocaleHelper;
+use Psc\Session\Session;
+use Psc\CMS\UserManager;
 
 class Main extends \Psc\CMS\ProjectMain {
   
@@ -37,7 +39,15 @@ class Main extends \Psc\CMS\ProjectMain {
       ->setLanguages($this->getLanguages())
       ->setLanguage($this->getLanguage());
 
+    $this->getFrontController()->getRequestHandler()->addService(
+      $this->getService()
+    );
+
     parent::initServices();
+  }
+
+  public function getService() {
+    return new CMS\Service($this->getProject(), $this->getUserManager(), $this->getEnvironmentContainer());
   }
   
   public function initEntityMetaFor(EntityMeta $meta) {
@@ -63,5 +73,22 @@ class Main extends \Psc\CMS\ProjectMain {
     }
     
     return $this->welcomeTemplate;
+  }
+
+  public function setSession(Session $session) {
+    $this->session = $session;
+  }
+
+  public function getUser() {
+    return $this->getContainer()->getLoggedInUser();
+  }
+
+  public function getContainer() {
+    if (!isset($this->container)) {
+      $this->container = parent::getContainer();
+      $this->container->main = $this;
+    }
+
+    return $this->container;
   }
 }
