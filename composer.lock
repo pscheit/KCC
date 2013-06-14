@@ -268,12 +268,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "2169b0ce1d253d448c60b7d40bbe4e4b5afe22fe"
+                "reference": "d658ec7a03f6475eff0dd1eb940bdedd862e4b96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/2169b0ce1d253d448c60b7d40bbe4e4b5afe22fe",
-                "reference": "2169b0ce1d253d448c60b7d40bbe4e4b5afe22fe",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/d658ec7a03f6475eff0dd1eb940bdedd862e4b96",
+                "reference": "d658ec7a03f6475eff0dd1eb940bdedd862e4b96",
                 "shasum": ""
             },
             "require": {
@@ -319,9 +319,9 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -334,7 +334,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2013-05-27 19:11:46"
+            "time": "2013-06-10 18:20:01"
         },
         {
             "name": "doctrine/dbal",
@@ -639,12 +639,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/psc-cms.git",
-                "reference": "f6aed4d4a898bbac996bf3e6867de0f5ffda5182"
+                "reference": "95fe27c7558e3a447e95ce2d8bc00d2679b95c3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pscheit/psc-cms/zipball/f6aed4d4a898bbac996bf3e6867de0f5ffda5182",
-                "reference": "f6aed4d4a898bbac996bf3e6867de0f5ffda5182",
+                "url": "https://api.github.com/repos/pscheit/psc-cms/zipball/95fe27c7558e3a447e95ce2d8bc00d2679b95c3e",
+                "reference": "95fe27c7558e3a447e95ce2d8bc00d2679b95c3e",
                 "shasum": ""
             },
             "require": {
@@ -660,7 +660,7 @@
                 "symfony/process": "2.1.*@stable",
                 "webforge/common": "1.1.*@dev",
                 "webforge/translation": "1.1.*@dev",
-                "webforge/webforge": "1.2.*@dev"
+                "webforge/webforge": "1.3.*@dev"
             },
             "require-dev": {
                 "doctrine/data-fixtures": "1.0.*@alpha",
@@ -671,7 +671,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "autoload": {
@@ -686,8 +686,8 @@
                     "PHPWord": [
                         "application/src/PHPWord/"
                     ],
-                    "Webforge\\Code\\Test": [
-                        "D:\\www\\webforge-testplate\\lib"
+                    "Webforge\\Translation": [
+                        "D:\\www\\webforge-translation\\lib"
                     ]
                 }
             },
@@ -707,7 +707,7 @@
                 "cms",
                 "framework"
             ],
-            "time": "2013-06-08 10:16:37"
+            "time": "2013-06-13 11:23:55"
         },
         {
             "name": "pscheit/psc-cms-boot",
@@ -834,18 +834,66 @@
             "time": "2012-06-17 13:55:34"
         },
         {
+            "name": "symfony/config",
+            "version": "2.3.x-dev",
+            "target-dir": "Symfony/Component/Config",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Config.git",
+                "reference": "v2.3.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/v2.3.1",
+                "reference": "v2.3.1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/filesystem": ">=2.3,<3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Config\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Config Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-06-03 00:18:25"
+        },
+        {
             "name": "symfony/console",
             "version": "2.1.x-dev",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "036bcb3ec280f664489a9523c8939d404973c0b4"
+                "reference": "a5e96b2363aca8a5400fec3bbcb3201a4b0513fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/036bcb3ec280f664489a9523c8939d404973c0b4",
-                "reference": "036bcb3ec280f664489a9523c8939d404973c0b4",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/a5e96b2363aca8a5400fec3bbcb3201a4b0513fb",
+                "reference": "a5e96b2363aca8a5400fec3bbcb3201a4b0513fb",
                 "shasum": ""
             },
             "require": {
@@ -873,7 +921,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-06-04 14:58:25"
+            "time": "2013-06-11 07:34:22"
         },
         {
             "name": "symfony/css-selector",
@@ -916,6 +964,100 @@
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
             "time": "2013-05-17 00:31:34"
+        },
+        {
+            "name": "symfony/filesystem",
+            "version": "dev-master",
+            "target-dir": "Symfony/Component/Filesystem",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Filesystem.git",
+                "reference": "7975f9df488adbc9cef2089bac2887f14085481f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/7975f9df488adbc9cef2089bac2887f14085481f",
+                "reference": "7975f9df488adbc9cef2089bac2887f14085481f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Filesystem\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Filesystem Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-06-11 07:15:38"
+        },
+        {
+            "name": "symfony/finder",
+            "version": "2.3.x-dev",
+            "target-dir": "Symfony/Component/Finder",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Finder.git",
+                "reference": "v2.3.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/v2.3.1",
+                "reference": "v2.3.1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Finder\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Finder Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-06-02 12:05:51"
         },
         {
             "name": "symfony/http-foundation",
@@ -1117,15 +1259,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/webforge-translation.git",
-                "reference": "e0e648d93fbe7d9089dc651308654f65011e8fee"
+                "reference": "917b89938dad22d48057862891993564eeeb7b3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pscheit/webforge-translation/zipball/e0e648d93fbe7d9089dc651308654f65011e8fee",
-                "reference": "e0e648d93fbe7d9089dc651308654f65011e8fee",
+                "url": "https://api.github.com/repos/pscheit/webforge-translation/zipball/917b89938dad22d48057862891993564eeeb7b3e",
+                "reference": "917b89938dad22d48057862891993564eeeb7b3e",
                 "shasum": ""
             },
             "require": {
+                "symfony/config": "2.3.*@stable",
+                "symfony/finder": "2.3.*@stable",
                 "symfony/translation": "2.3.*@stable"
             },
             "require-dev": {
@@ -1156,7 +1300,7 @@
                 }
             ],
             "description": "Translation component based on symfony/translation",
-            "time": "2013-06-04 10:55:13"
+            "time": "2013-06-10 19:51:02"
         },
         {
             "name": "webforge/webforge",
@@ -1164,12 +1308,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/webforge.git",
-                "reference": "50d099720ffb85aa3a7d6841a2e5419557bd7f17"
+                "reference": "68e46a39305cdcc9327350fa7821e80c55c030c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pscheit/webforge/zipball/50d099720ffb85aa3a7d6841a2e5419557bd7f17",
-                "reference": "50d099720ffb85aa3a7d6841a2e5419557bd7f17",
+                "url": "https://api.github.com/repos/pscheit/webforge/zipball/68e46a39305cdcc9327350fa7821e80c55c030c9",
+                "reference": "68e46a39305cdcc9327350fa7821e80c55c030c9",
                 "shasum": ""
             },
             "require": {
@@ -1177,7 +1321,7 @@
                 "ext-mbstring": "*",
                 "nikic/php-parser": "v0.9.3",
                 "php": ">=5.3.2",
-                "pscheit/psc-cms": "1.2.*@dev",
+                "pscheit/psc-cms": "1.3.*@dev",
                 "pscheit/psc-cms-boot": "2.*",
                 "sebastian/diff": "1.0.*",
                 "symfony/console": "2.1.*@stable",
@@ -1194,7 +1338,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "autoload": {
@@ -1222,7 +1366,7 @@
                 "cms",
                 "framework"
             ],
-            "time": "2013-06-08 10:17:43"
+            "time": "2013-06-12 12:39:31"
         }
     ],
     "packages-dev": [
@@ -1433,19 +1577,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pscheit/webforge-testplate.git",
-                "reference": "fb555732dd0c7bb8622cac54cf44d189376a4697"
+                "reference": "9a0e30b6aeb9b43f2bcff3e2a6e5717f80e87503"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pscheit/webforge-testplate/zipball/fb555732dd0c7bb8622cac54cf44d189376a4697",
-                "reference": "fb555732dd0c7bb8622cac54cf44d189376a4697",
+                "url": "https://api.github.com/repos/pscheit/webforge-testplate/zipball/9a0e30b6aeb9b43f2bcff3e2a6e5717f80e87503",
+                "reference": "9a0e30b6aeb9b43f2bcff3e2a6e5717f80e87503",
                 "shasum": ""
             },
             "require": {
                 "webforge/common": "1.1.*@dev"
             },
             "require-dev": {
-                "webforge/testplate": "1.2.*@dev"
+                "webforge/translation": "1.1.*@dev"
             },
             "type": "library",
             "extra": {
@@ -1475,7 +1619,7 @@
                 }
             ],
             "description": "Testplate for webforge for base testcases",
-            "time": "2013-06-05 14:57:09"
+            "time": "2013-06-13 11:02:16"
         }
     ],
     "aliases": [

@@ -15,7 +15,5 @@ requirejs.config({
 
 define(['require', 'boot-helper'], function (require, boot) {
 
-  //require(['app/main']);
-
   return {};
 });
