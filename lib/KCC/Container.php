@@ -25,10 +25,12 @@ class Container extends \Psc\CMS\Roles\AbstractContainer {
   }
 
   public function getLoggedInUser() {
-    $session = $this->getEnvironmentContainer()->getSession();
+    $persona = $this->getController('Persona');
 
-    if ($email = $session->get('user', 'email')) {
-      return $this->getController('User')->getEntity($email);
+    $user = $persona->whoami();
+
+    if (isset($user->email)) {
+      return $this->getController('User')->getEntity($user->email);
     }
 
     // use normal auth for tests

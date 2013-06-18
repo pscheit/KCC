@@ -9,6 +9,9 @@ $page->addTwitterBootstrapCSS();
 $page->loadCSS('css/kcc.css');
 $page->setOpen();
 
+// <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+// to enable persona for IE
+
 print $page;
 ?>
 

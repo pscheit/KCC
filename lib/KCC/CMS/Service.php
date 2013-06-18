@@ -46,6 +46,18 @@ class Service extends \Psc\CMS\Service\ControllerService {
           }
         )
       );
+    } elseif ($r->matchesValue('whoami')) {
+      return array(
+        $this->personaController,
+        'whoami',
+        array()
+      );
+    } elseif ($r->matchesValue('logout')) {
+      return array(
+        $this->personaController,
+        'logout',
+        array()
+      );
     }
   }
 
