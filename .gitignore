@@ -1,3 +1,5 @@
 /vendor/
 /*.sublime-workspace
 /node_modules
+
+/composer.lock

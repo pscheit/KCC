@@ -11,19 +11,11 @@ use Psc\CMS\Project;
 class DeployCommand extends \Psc\System\Console\DeployCommand {
   
   protected function initProperties($mode) {
-    if ($mode === 'staging') {
-      $this->hostName = 'hagedorn';
-      $this->baseUrl = 'hagedorn.ps-webforge.net';
-      $this->vhostName = 'hagedorn.ps-webforge.net';
-      $this->staging = TRUE;
-      $this->variant = 'staging';
-    } else {
-      $this->hostName = 'hagedorn';
-      $this->baseUrl = 'preview.hagedorn-gmbh.de';
-      $this->vhostName = 'www.hagedorn-gmbh.de';
-      $this->staging = FALSE;
-    }
-    $this->server = 'www-data@hagedorn.ps-webforge.net';
+    $this->hostName = 'pegasus';
+    $this->baseUrl = 'kcc.ps-webforge.com';
+    $this->vhostName = 'kcc.ps-webforge.com';
+    $this->staging = FALSE;
+    $this->server = 'www-data@pegasus.ps-webforge.net';
   }
   
   protected function initTasks(Deployer $deployer, Project $project, $mode, WebforgeContainer $container) {
@@ -31,9 +23,7 @@ class DeployCommand extends \Psc\System\Console\DeployCommand {
 
     $deployer->addTask(
       $deployer->createTask('CopyProjectSources')
-        ->addAdditionalPath('www/cms/admin/')
         ->addAdditionalPath('application/')
-        ->addAdditionalPath('www/cms/sce/')
     );
     
     $deployer->addTask(
@@ -41,10 +31,9 @@ class DeployCommand extends \Psc\System\Console\DeployCommand {
         ->setComposerAutoLoading(TRUE)
         ->addModule('Symfony')
         ->addModule('Doctrine')
-        ->addModule('Imagine')
     );
     
-    $deployer->addTask($deployer->createTask('DeployPscCMS')); // installiert phars und so 
+    $deployer->addTask($deployer->createTask('DeployPscCMS'));
     $deployer->addTask($deployer->createTask('DeployDoctrine'));
     
     $configureApache =
@@ -56,11 +45,9 @@ class DeployCommand extends \Psc\System\Console\DeployCommand {
           ->setAuth('/', '%vhost%etc/auth/public', 'hagedorn staging access')
        :
        $deployer->createTask('ConfigureApache')
-          ->setServerName('www.hagedorn-gmbh.de')
-          ->setServerAlias('hagedorn-gmbh.de preview.hagedorn-gmbh.de server.hagedorn-gmbh.de *.messerschleifen.de *.hagedorn-messer.de *.hagedorn-messer.com')
-          ->setServerNameCms('cms.hagedorn-gmbh.de')
+          ->setServerName('kcc.ps-webforge.com')
           //->setAuth('/', '%vhost%etc/auth/public', 'hagedorn access')
-          ->setAuth('/admin/', '%vhost%etc/auth/admin', 'hagedorn admin access')
+          //->setAuth('/admin/', '%vhost%etc/auth/admin', 'hagedorn admin access')
       ;
 
     $deployer->addTask(
@@ -81,4 +68,3 @@ class DeployCommand extends \Psc\System\Console\DeployCommand {
 
   //protected function updateComposer($project) {}
 }
-?>
